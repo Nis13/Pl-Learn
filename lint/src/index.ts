@@ -7,12 +7,6 @@ function check_cyclomatic_complexity(x:number){
         return 4; 
     }
 }
-
-console.log("I have added a Console to check the Pull requests");
-console.log("Now i add changes to try branch from original account");
-console.log("to bring merge conflict from second account");
-console.log("after resolving the merge");
-
 // check_cyclomatic_complexity(2);
 
 
