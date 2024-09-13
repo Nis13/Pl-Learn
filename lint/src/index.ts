@@ -9,6 +9,7 @@ function check_cyclomatic_complexity(x:number){
 }
 
 console.log("I have added a Console to check the Pull requests");
+console.log("to bring merge conflict from second account");
 
 // check_cyclomatic_complexity(2);
 
