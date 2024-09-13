@@ -7,7 +7,6 @@ function check_cyclomatic_complexity(x:number){
         return 4; 
     }
 }
-console.log("To check pr from base account");
 // check_cyclomatic_complexity(2);
 
 
@@ -28,6 +27,7 @@ console.log("To check pr from base account");
 //     const nameString = 'xyz';
 //     console.log(nameString);
 // };
+
 
 
 console.log("for pr");
