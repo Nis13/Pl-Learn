@@ -3,6 +3,7 @@ import routes from "./routes/route.index";
 import "reflect-metadata";
 import config from "./config";
 import AppDataSource from "./typeORMfile";
+import { errorHandler } from "./middleware/errorValidator";
 const app = express();
 
 app.use(express.json());
@@ -17,5 +18,7 @@ AppDataSource.initialize()
     .catch((err)=> console.log("Error connecting database",err));
 
 app.use(routes);
+
+app.use(errorHandler);
 
 
