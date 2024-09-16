@@ -27,5 +27,5 @@ export async function updateUser(id:number,updateUserDetails: Partial<User>): Pr
 export async function deleteUserById(id:number): Promise<string>{
     await UserRepo.delete(id);
     return "user Successfully deleted";
-
 }
+
