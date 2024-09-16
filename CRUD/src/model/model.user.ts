@@ -1,50 +1,31 @@
+import { User as UserEntity } from "../entities/user";
 import { User } from "../interface/user.interface";
+import AppDataSource from "../typeORMfile";
 
-const users =[
-    {
-        id:1,
-        name: "Admin",
-        email:"Admin@gmail.com",
-    },
-    {
-        id:2,
-        name: "User",
-        email:"User@gmail.com"
-    }
-];
+const UserRepo = AppDataSource.getRepository(UserEntity);
 
-export function getAllUsersModel(): User[]{
-    return users;
+export async function getAllUsersModel(): Promise<User[]>{
+    const allUsers = await UserRepo.find();
+    return allUsers;
 }
 
-export function getUserById(id:number): User|undefined{
-    const userDetail = users.find((user) => user.id == id);
+export async function getUserById(id:number): Promise<User|null>{
+    const userDetail = await UserRepo.findOneBy({id:id});
     return userDetail;
 }
 
-export function createUser(userDetails: Pick<User, 'name'|'email'>): string{
-    const highestId = Math.max(...users.map(user => user.id));
-    const newUser = {
-        ...userDetails,
-        id: highestId +1
-    };
-    users.push(newUser);
-    return "User created successfully";
+export async function createUser(userDetails: Pick<User, 'name'|'email'>):Promise<User>{
+    const userInserted = await UserRepo.save(userDetails);
+    return userInserted;
 }
 
-export function updateUser(id:number,updateUserDetails: Partial<User>): User{
-    users.forEach(user => {
-        if (user.id === id) {
-            if (updateUserDetails.name !== undefined) user.name = updateUserDetails.name ;
-            if (updateUserDetails.email !== undefined) user.email = updateUserDetails.email;
-        }
-    });
-    return users.find((user) => user.id == id)!;
+export async function updateUser(id:number,updateUserDetails: Partial<User>): Promise<User|null>{
+    await UserRepo.update(id, updateUserDetails);
+    return await UserRepo.findOneBy({id:id});
 }
 
-export function deleteUserById(id:number): string{
-    const userid = users.findIndex(user => user.id == id);
-    if (userid !== -1) users.splice(userid);
-    return `user of id ${id} deleted successfully`;
-}
+export async function deleteUserById(id:number): Promise<string>{
+    await UserRepo.delete(id);
+    return "user Successfully deleted";
 
+}
