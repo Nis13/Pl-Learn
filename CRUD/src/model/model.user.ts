@@ -29,4 +29,3 @@ export async function deleteUserById(id:number): Promise<string>{
     return "user Successfully deleted";
 
 }
-
