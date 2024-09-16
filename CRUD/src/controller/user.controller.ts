@@ -1,34 +1,33 @@
-
 import { NextFunction, Request, Response } from "express";
-import { createUserService, deleteUserService, getAllUsersService, getUserByIdService, updateUserService } from "../services/user.service";
+import * as UserService from "../services/user.service";
 
-export async function  getAllUsersController(req: Request, res:Response, next:NextFunction){
-    const users= getAllUsersService();
+export async function  getAllUsersController(req: Request, res:Response, next:NextFunction) : Promise<void>{
+    const users= UserService.getAllUsersService();
     res.json(users);
 }
 
-export async function getUserByIdController(req:Request, res:Response, next:NextFunction){
+export async function getUserByIdController(req:Request, res:Response, next:NextFunction): Promise<void>{
     const { id } = req.params;
-    const user = getUserByIdService(+id);
+    const user = UserService.getUserByIdService(+id);
     res.json(user);
 }
 
-export async function createUserController(req:Request, res:Response, next:NextFunction){
+export async function createUserController(req:Request, res:Response, next:NextFunction): Promise<void>{
     const user = req.body;
-    const message = createUserService(user);
+    const message = UserService.createUserService(user);
     res.json(message);
 }
 
-export async function updateUserController(req:Request, res:Response, next:NextFunction){
+export async function updateUserController(req:Request, res:Response, next:NextFunction): Promise<void>{
     const user = req.body;
     const { id } = req.params;
-    const message = updateUserService(+id,user);
+    const message = UserService.updateUserService(+id,user);
     res.json(message);
 }
 
-export async function deleteUserByIdController(req:Request, res:Response, next:NextFunction){
+export async function deleteUserByIdController(req:Request, res:Response, next:NextFunction): Promise<void>{
     const { id } = req.params;
-    const user = deleteUserService(+id);
+    const user = UserService.deleteUserService(+id);
     res.json(user);
 }
 

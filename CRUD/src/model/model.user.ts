@@ -13,36 +13,36 @@ const users =[
     }
 ];
 
-export function getAllUsersModel(){
+export function getAllUsersModel(): User[]{
     return users;
 }
 
-export function getUserById(id:number){
+export function getUserById(id:number): User|undefined{
     const userDetail = users.find((user) => user.id == id);
-    if (!userDetail) return {message:`User of ${id} doesn't exists`};
     return userDetail;
 }
 
-export function createUser(userDetails: Pick<User, 'name'|'email'>){
+export function createUser(userDetails: Pick<User, 'name'|'email'>): string{
     const highestId = Math.max(...users.map(user => user.id));
     const newUser = {
         ...userDetails,
         id: highestId +1
     };
     users.push(newUser);
-    return {message:"User created successfully"};
+    return "User created successfully";
 }
 
-export function updateUser(id:number,updateUserDetails: Partial<User>){
+export function updateUser(id:number,updateUserDetails: Partial<User>): User{
     users.forEach(user => {
         if (user.id === id) {
             if (updateUserDetails.name !== undefined) user.name = updateUserDetails.name ;
             if (updateUserDetails.email !== undefined) user.email = updateUserDetails.email;
         }
     });
+    return users.find((user) => user.id == id)!;
 }
 
-export function deleteUserById(id:number){
+export function deleteUserById(id:number): string{
     const userid = users.findIndex(user => user.id == id);
     if (userid !== -1) users.splice(userid);
     return `user of id ${id} deleted successfully`;
