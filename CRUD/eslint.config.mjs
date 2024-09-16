@@ -14,7 +14,7 @@ export default [
   ...tseslint.configs.recommended,
 
   {rules: {
-    // "no-console": "warn", 
+    "no-console": "warn", 
     "semi": ["error", "always"], 
     "@typescript-eslint/no-unused-vars": "error", 
     // "complexity": ["error", 3],
@@ -22,14 +22,6 @@ export default [
      "@typescript-eslint/no-floating-promises": "error",
      "no-shadow": "off",
     "@typescript-eslint/no-shadow": "error",
-    // "@typescript-eslint/naming-convention": ["warn", 
-    //   {
-    //     selector: 'variable',
-    //     format: ['camelCase'],
-    //     leadingUnderscore: 'allow',
-    //     trailingUnderscore: 'allow',
-    //   },
-    // ]
   },
 }
 ];
