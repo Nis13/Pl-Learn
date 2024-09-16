@@ -4,20 +4,6 @@ import AppDataSource from "../typeORMfile";
 
 const UserRepo = AppDataSource.getRepository(UserEntity);
 
-
-const users =[
-    {
-        id:1,
-        name: "Admin",
-        email:"Admin@gmail.com",
-    },
-    {
-        id:2,
-        name: "User",
-        email:"User@gmail.com"
-    }
-];
-
 export async function getAllUsersModel(): Promise<User[]>{
     const allUsers = await UserRepo.find();
     return allUsers;
@@ -39,9 +25,6 @@ export async function updateUser(id:number,updateUserDetails: Partial<User>): Pr
 }
 
 export async function deleteUserById(id:number): Promise<string>{
-    // const userid = users.findIndex(user => user.id == id);
-    // if (userid !== -1) users.splice(userid);
-    // return `user of id ${id} deleted successfully`;
     await UserRepo.delete(id);
     return "user Successfully deleted";
 
