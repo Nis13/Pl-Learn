@@ -1,23 +1,33 @@
-import{ User } from"../interface/user.interface";
-import{ createUser, deleteUserById, getAllUsersModel, getUserById, updateUser } from"../model/model.user";
+import { NO_USERS_MESSAGE, USER_NOT_FOUND } from "../constants/returnmessage";
+import { NotFoundError } from "../error/NotFoundError";
+import { User, UserUpdateInfo } from "../interface/user.interface";
+import * as UserRepo from "../repository/repo.user";
 
-export function getAllUsersService(): Promise<User[]>{
-    return getAllUsersModel();
+export async function getAllService(): Promise<User[]> {
+  const users = await UserRepo.getAll();
+  if (users.length == 0) throw new NotFoundError(NO_USERS_MESSAGE());
+  return users;
 }
 
-export function getUserByIdService(id:number): Promise<User | null>{
-    return getUserById(id);
+export async function getByIdService(id: string): Promise<User> {
+  const user = await UserRepo.getById(id);
+  if (!user) throw new NotFoundError(USER_NOT_FOUND(id));
+  return user;
 }
 
-export function createUserService(userDetail: User): Promise<User>{
-    return createUser(userDetail);
+export function createService(userDetail: User): Promise<User> {
+  return UserRepo.create(userDetail);
 }
 
-export async function updateUserService(id:number,userDetail: Pick<User, 'name'|'email'>): Promise<User|null>{
-    await getUserById(id);
-    return updateUser(id,userDetail);
+export async function updateByIdService(
+  id: string,
+  userDetail: UserUpdateInfo
+): Promise<User | null> {
+  await getByIdService(id);
+  return UserRepo.updateById(id, userDetail);
 }
 
-export function deleteUserService(id:number): Promise<string>{
-    return deleteUserById(id);
+export async function deleteService(id: string): Promise<string> {
+  await getByIdService(id);
+  return UserRepo.deleteById(id);
 }

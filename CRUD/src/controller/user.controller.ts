@@ -1,39 +1,72 @@
 import{ NextFunction, Request, Response } from"express";
 import* as UserService from"../services/user.service";
 
-export async function  getAllUsersController(req: Request, res:Response, next:NextFunction) : Promise<void>{
-    const users= await UserService.getAllUsersService();
-    console.log(users);
+export async function getAllController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const users = await UserService.getAllService();
     res.json(users);
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function getUserByIdController(req:Request, res:Response, next:NextFunction): Promise<void>{
-    const{ id } = req.params;
-    const user = await UserService.getUserByIdService(+id);
+export async function getByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const user = await UserService.getByIdService(id);
     res.json(user);
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function createUserController(req:Request, res:Response, next:NextFunction): Promise<void>{
-    const{name,email,...userProfile} = req.body;
-    const userdetail = {
-        name:name,
-        email:email,
-        profile:userProfile
-    };
-    const createdUser = await UserService.createUserService(userdetail);
-    res.json(createdUser);
-}
-
-export async function updateUserController(req:Request, res:Response, next:NextFunction): Promise<void>{
+export async function createController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
     const user = req.body;
-    const{ id } = req.params;
-    const updatedUser = await UserService.updateUserService(+id,user);
+    const createdUser = await UserService.createService(user);
+    res.json(createdUser);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const user = req.body;
+    const { id } = req.params;
+    const updatedUser = await UserService.updateByIdService(id, user);
     res.json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function deleteUserByIdController(req:Request, res:Response, next:NextFunction): Promise<void>{
-    const{ id } = req.params;
-    const message = await UserService.deleteUserService(+id);
+export async function deleteByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const message = await UserService.deleteService(id);
     res.json(message);
+  } catch (err) {
+    next(err);
+  }
 }
-

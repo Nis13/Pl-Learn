@@ -10,3 +10,5 @@ export interface UserProfile{
     gender:string;
     bio: string
 }
+
+export type UserUpdateInfo = Pick<User, "name" | "email">;
