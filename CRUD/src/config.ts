@@ -4,7 +4,7 @@ dotenv.config({path: __dirname + "/../.env"});
 
 const config = {
     port: process.env.PORT,
-    database:{
+    database: {
         host: process.env.DB_HOST!,
         port: process.env.DB_PORT!,
         user: process.env.DB_USER!,
