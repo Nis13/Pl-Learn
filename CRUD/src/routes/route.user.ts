@@ -2,12 +2,12 @@ import express from 'express';
 import * as userRoutes from '../controller/user.controller';
 const router = express();
 
-router.get('/', userRoutes.getAllUsersController);
-router.get('/:id',userRoutes.getUserByIdController);
+router.get('/', userRoutes.getAllController);
+router.get('/:id',userRoutes.getByIdController);
 
-router.post('/', userRoutes.createUserController);
-router.put('/:id', userRoutes.updateUserController);
+router.post('/', userRoutes.createController);
+router.put('/:id', userRoutes.updateByIdController);
 
-router.delete('/:id', userRoutes.deleteUserByIdController);
+router.delete('/:id', userRoutes.deleteByIdController);
 
 export default router;

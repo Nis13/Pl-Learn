@@ -1,31 +1,34 @@
 import { NotFoundError } from "../error/NotFoundError";
 import { User } from "../interface/user.interface";
-import { createUser, deleteUserById, getAllUsersModel, getUserById, updateUser } from "../model/model.user";
+import * as UserRepo from "../repository/repo.user";
+import {v4 as uuidv4} from "uuid";
 
-export async function getAllUsersService(): Promise<User[]>{
-    const users = await getAllUsersModel();
-    if (users.length == 0) throw(new NotFoundError("No Users are available"));
+
+export async function getAllService(): Promise<User[]>{
+    const users = await UserRepo.getAll();
+    if (users.length == 0) throw (new NotFoundError("No Users are available"));
     return users;
 }
 
-export async function getUserByIdService(id:number): Promise<User>{
-    const user = await getUserById(id);
-    if (!user) throw(new NotFoundError(`User of id ${id} not found`));
+export async function getByIdService(id:string): Promise<User>{
+    const user = await UserRepo.getById(id);
+    if (!user) throw (new NotFoundError(`User of id ${id} not found`));
     return user;
 }
 
-export function createUserService(userDetail: Pick<User, 'name'|'email'>): Promise<User>{
-    return createUser(userDetail);
+export function createService(userDetail: User): Promise<User>{
+    const id = uuidv4();
+    console.log(id);
+    userDetail.id = id;
+    return UserRepo.create(userDetail);
 }
 
-export async function updateUserService(id:number,userDetail: Pick<User, 'name'|'email'>): Promise<User|null>{
-    const user = await getUserById(id);
-    if (!user) throw(new NotFoundError(`User of id ${id} not found`));
-    return updateUser(id,userDetail);
+export async function updateByIdService(id:string,userDetail: Pick<User, 'name'|'email'>): Promise<User|null>{
+    await getByIdService(id);
+    return UserRepo.updateById(id,userDetail);
 }
 
-export async function deleteUserService(id:number): Promise<string>{
-    const user = await getUserById(id);
-    if (!user) throw(new NotFoundError(`User of id ${id} not found`));
-    return deleteUserById(id);
+export async function deleteService(id:string): Promise<string>{
+    await getByIdService(id);
+    return UserRepo.deleteById(id);
 }
