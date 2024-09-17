@@ -1,11 +1,17 @@
-import { User as UserEntity } from "../entities/user";
-import { User } from "../interface/user.interface";
-import AppDataSource from "../typeORMfile";
+import{ Profile } from"../entities/profile";
+import{ User as UserEntity } from"../entities/user";
+import{ User } from"../interface/user.interface";
+import AppDataSource from"../typeORMfile";
 
 const UserRepo = AppDataSource.getRepository(UserEntity);
+const UserProfileRepo = AppDataSource.getRepository(Profile);
 
 export async function getAllUsersModel(): Promise<User[]>{
-    const allUsers = await UserRepo.find();
+    const allUsers = await UserRepo.find({
+        relations: {
+            profile: true
+        }
+    });
     return allUsers;
 }
 
@@ -14,7 +20,7 @@ export async function getUserById(id:number): Promise<User|null>{
     return userDetail;
 }
 
-export async function createUser(userDetails: Pick<User, 'name'|'email'>):Promise<User>{
+export async function createUser(userDetails: User):Promise<User>{
     const userInserted = await UserRepo.save(userDetails);
     return userInserted;
 }
@@ -26,6 +32,5 @@ export async function updateUser(id:number,updateUserDetails: Partial<User>): Pr
 
 export async function deleteUserById(id:number): Promise<string>{
     await UserRepo.delete(id);
-    return "user Successfully deleted";
-
+    return"user Successfully deleted";
 }

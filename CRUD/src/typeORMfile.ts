@@ -1,5 +1,5 @@
-import { DataSource } from 'typeorm';
-import config from './config';
+import{ DataSource } from'typeorm';
+import config from'./config';
 const AppDataSource = new DataSource({
     type: 'postgres',
     host: config.database.host,
