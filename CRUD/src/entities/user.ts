@@ -1,19 +1,25 @@
-import {  Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
-export class User{
-    @PrimaryColumn("uuid")
-    id: string;
+export class User {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @Column("varchar",{length: 200})
-    name: string;
+  @Column("varchar", { length: 200 })
+  name: string;
 
-    @Column("varchar",{length: 200})
-    email: string;
+  @Column("varchar", { length: 200 })
+  email: string;
 
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt:Date;
-    
-    @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt:Date;
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }
