@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as UserService from "../services/user.service";
+import loggerWithNameSpace from "../utilis/logger";
+
+const logger = loggerWithNameSpace("UserController");
 
 export async function getAllController(
   req: Request,
@@ -7,6 +10,7 @@ export async function getAllController(
   next: NextFunction
 ): Promise<void> {
   try {
+    logger.info("called getAllUsers By Controller");
     const users = await UserService.getAllService();
     res.json(users);
   } catch (err) {
@@ -21,6 +25,7 @@ export async function getByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
+    logger.info("called getUserByID By Controller");
     const user = await UserService.getByIdService(id);
     res.json(user);
   } catch (err) {
@@ -35,6 +40,7 @@ export async function createController(
 ): Promise<void> {
   try {
     const { name, email, ...userProfile } = req.body;
+    logger.info("called createUser By Controller");
     const userdetail = {
       name: name,
       email: email,
@@ -55,6 +61,7 @@ export async function updateByIdController(
   try {
     const user = req.body;
     const { id } = req.params;
+    logger.info("called updateUser By Controller");
     const updatedUser = await UserService.updateByIdService(id, user);
     res.json(updatedUser);
   } catch (err) {
@@ -69,6 +76,7 @@ export async function deleteByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
+    logger.info("called deleteUser By Controller");
     const message = await UserService.deleteService(id);
     res.json(message);
   } catch (err) {
