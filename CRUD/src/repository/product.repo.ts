@@ -24,7 +24,7 @@ export async function update(
   id: string,
   productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  await ProductRepo.save(productDetails);
+  await ProductRepo.update(id, productDetails);
   return await ProductRepo.findOneBy({ id: id });
 }
 
