@@ -1,21 +1,25 @@
-import { USER_DELETE_MESSAGE } from "../constants/returnmessage";
+import { USER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
 import { User as UserEntity } from "../entities/user";
 import { User } from "../interface/user.interface";
 import AppDataSource from "../typeORMfile";
 
 const UserRepo = AppDataSource.getRepository(UserEntity);
 
-export async function getAll(): Promise<User[]> {
-  const allUsers = await UserRepo.find();
+export async function getAll(): Promise<UserEntity[]> {
+  const allUsers = await UserRepo.find({
+    relations: {
+      profile: true,
+    },
+  });
   return allUsers;
 }
 
-export async function getById(id: string): Promise<User | null> {
+export async function getById(id: string): Promise<UserEntity | null> {
   const userDetail = await UserRepo.findOneBy({ id: id });
   return userDetail;
 }
 
-export async function create(userDetails: User): Promise<User> {
+export async function create(userDetails: User): Promise<UserEntity> {
   const userInserted = await UserRepo.save(userDetails);
   return userInserted;
 }
@@ -23,7 +27,7 @@ export async function create(userDetails: User): Promise<User> {
 export async function updateById(
   id: string,
   updateUserDetails: Partial<User>
-): Promise<User | null> {
+): Promise<UserEntity | null> {
   await UserRepo.update(id, updateUserDetails);
   return await UserRepo.findOneBy({ id: id });
 }

@@ -1,5 +1,5 @@
-import{ NextFunction, Request, Response } from"express";
-import* as UserService from"../services/user.service";
+import { NextFunction, Request, Response } from "express";
+import * as UserService from "../services/user.service";
 
 export async function getAllController(
   req: Request,
@@ -34,8 +34,13 @@ export async function createController(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = req.body;
-    const createdUser = await UserService.createService(user);
+    const { name, email, ...userProfile } = req.body;
+    const userdetail = {
+      name: name,
+      email: email,
+      profile: userProfile,
+    };
+    const createdUser = await UserService.createService(userdetail);
     res.json(createdUser);
   } catch (err) {
     next(err);

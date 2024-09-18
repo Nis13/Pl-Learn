@@ -2,29 +2,23 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Profile } from "./profile";
+import { ProductCategory } from "./productCategory";
 import { Order } from "./order";
 
 @Entity()
-export class User {
+export class Product {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column("varchar", { length: 200 })
   name: string;
 
-  @Column("varchar", { length: 200 })
-  email: string;
-
-  @OneToOne(() => Profile, { cascade: true })
-  @JoinColumn()
-  profile: Profile;
+  @Column()
+  price: number;
 
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
@@ -32,6 +26,9 @@ export class User {
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
 
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[];
+  @ManyToOne(() => ProductCategory, (pdtCategory) => pdtCategory.products)
+  category: ProductCategory;
+
+  @ManyToOne(() => Order, (order) => order.products)
+  order: Order;
 }

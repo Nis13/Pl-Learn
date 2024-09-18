@@ -1,8 +1,8 @@
-import express from"express";
-import routes from"./routes/route.index";
-import"reflect-metadata";
-import config from"./config";
-import AppDataSource from"./typeORMfile";
+import express from "express";
+import routes from "./routes/route.index";
+import "reflect-metadata";
+import config from "./config";
+import AppDataSource from "./typeORMfile";
 import { errorHandler } from "./middleware/errorValidator";
 const app = express();
 
