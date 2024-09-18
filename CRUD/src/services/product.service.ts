@@ -1,7 +1,7 @@
 import { PRODUCT_NOT_FOUND } from "../constants/EXCEPTIONERROR";
+import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
-import { Product } from "../interface/product.interface";
 import * as ProductRepo from "../repository/product.repo";
 
 export function getAllService(): Promise<ProductEntity[]> {
@@ -15,14 +15,14 @@ export async function getByIdService(id: string): Promise<ProductEntity> {
 }
 
 export async function createService(
-  productDetail: Product
+  productDetail: CreateProductDTO
 ): Promise<ProductEntity> {
   return ProductRepo.create(productDetail);
 }
 
 export async function updateByIdService(
   id: string,
-  productDetail: Partial<Product>
+  productDetail: Partial<CreateProductDTO>
 ): Promise<ProductEntity | null> {
   await getByIdService(id);
   return ProductRepo.update(id, productDetail);

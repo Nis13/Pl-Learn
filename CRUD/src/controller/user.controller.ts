@@ -39,14 +39,11 @@ export async function createController(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { name, email, ...userProfile } = req.body;
+    const userDetail = req.body;
+    console.log(req.body);
     logger.info("called createUser By Controller");
-    const userdetail = {
-      name: name,
-      email: email,
-      profile: userProfile,
-    };
-    const createdUser = await UserService.createService(userdetail);
+    console.log(userDetail);
+    const createdUser = await UserService.createService(userDetail);
     res.json(createdUser);
   } catch (err) {
     next(err);

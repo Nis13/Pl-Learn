@@ -1,6 +1,6 @@
 import { USER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
+import { UpdateUserDTO } from "../DTO/updateUser.dto";
 import { User as UserEntity } from "../entities/user.entity";
-import { User } from "../interface/user.interface";
 import AppDataSource from "../typeORMfile";
 
 const UserRepo = AppDataSource.getRepository(UserEntity);
@@ -19,14 +19,23 @@ export async function getById(id: string): Promise<UserEntity | null> {
   return userDetail;
 }
 
-export async function create(userDetails: User): Promise<UserEntity> {
-  const userInserted = await UserRepo.save(userDetails);
+export async function create(
+  userDetails: Partial<UserEntity>
+): Promise<UserEntity> {
+  const { name, email, ...userProfile } = userDetails;
+  const userCreate = {
+    name: name,
+    email: email,
+    profile: userProfile,
+  };
+  const createUser = UserRepo.create(userCreate);
+  const userInserted = await UserRepo.save(createUser);
   return userInserted;
 }
 
 export async function updateById(
   id: string,
-  updateUserDetails: Partial<User>
+  updateUserDetails: UpdateUserDTO
 ): Promise<UserEntity | null> {
   await UserRepo.update(id, updateUserDetails);
   return await UserRepo.findOneBy({ id: id });

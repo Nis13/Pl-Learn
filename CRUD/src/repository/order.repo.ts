@@ -1,7 +1,6 @@
 import AppDataSource from "../typeORMfile";
 import { Order as OrderEntity } from "../entities/order.entity";
 import { ORDER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
-import { Order } from "../interface/order.interface";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -15,8 +14,10 @@ export async function getById(id: string): Promise<OrderEntity | null> {
   return orderDetail;
 }
 
-export async function create(orderDetails: Order): Promise<OrderEntity> {
-  const order = await OrderRepo.create(orderDetails);
+export async function create(
+  orderDetails: Partial<OrderEntity>
+): Promise<OrderEntity> {
+  const order = OrderRepo.create(orderDetails);
   const orderCreated = await OrderRepo.save(order);
   return orderCreated;
 }

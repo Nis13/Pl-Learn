@@ -1,7 +1,7 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
-import { Product } from "../interface/product.interface";
 import { PRODUCT_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
+import { CreateProductDTO } from "../DTO/createProduct.dto";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -11,18 +11,21 @@ export async function getAll(): Promise<ProductEntity[]> {
 }
 
 export async function getById(id: string): Promise<ProductEntity | null> {
-  const userDetail = await ProductRepo.findOneBy({ id: id });
-  return userDetail;
+  const productDetail = await ProductRepo.findOneBy({ id: id });
+  return productDetail;
 }
 
-export async function create(productDetails: Product): Promise<ProductEntity> {
-  const userInserted = await ProductRepo.save(productDetails);
-  return userInserted;
+export async function create(
+  productDetails: CreateProductDTO
+): Promise<ProductEntity> {
+  const product = ProductRepo.create(productDetails);
+  const productInserted = await ProductRepo.save(product);
+  return productInserted;
 }
 
 export async function update(
   id: string,
-  productDetails: Partial<ProductEntity>
+  productDetails: Partial<CreateProductDTO>
 ): Promise<ProductEntity | null> {
   await ProductRepo.update(id, productDetails);
   return await ProductRepo.findOneBy({ id: id });
