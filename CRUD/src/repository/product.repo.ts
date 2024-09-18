@@ -21,10 +21,11 @@ export async function create(productDetails: Product): Promise<ProductEntity> {
 }
 
 export async function update(
+  id: string,
   productDetails: Partial<ProductEntity>
-): Promise<ProductEntity> {
-  const productUpdated = await ProductRepo.save(productDetails);
-  return productUpdated;
+): Promise<ProductEntity | null> {
+  await ProductRepo.save(productDetails);
+  return await ProductRepo.findOneBy({ id: id });
 }
 
 export async function deleteById(id: string): Promise<string> {

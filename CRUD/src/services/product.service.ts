@@ -1,9 +1,8 @@
-import { USER_NOT_FOUND } from "../constants/EXCEPTIONERROR";
+import { PRODUCT_NOT_FOUND } from "../constants/EXCEPTIONERROR";
 import { Product as ProductEntity } from "../entities/product";
 import { NotFoundError } from "../error/NotFoundError";
 import { Product } from "../interface/product.interface";
 import * as ProductRepo from "../repository/product.repo";
-import * as UserService from "../services/user.service";
 
 export function getAllService(): Promise<ProductEntity[]> {
   return ProductRepo.getAll();
@@ -11,7 +10,7 @@ export function getAllService(): Promise<ProductEntity[]> {
 
 export async function getByIdService(id: string): Promise<ProductEntity> {
   const user = await ProductRepo.getById(id);
-  if (!user) throw new NotFoundError(USER_NOT_FOUND(id));
+  if (!user) throw new NotFoundError(PRODUCT_NOT_FOUND(id));
   return user;
 }
 
@@ -21,11 +20,15 @@ export async function createService(
   return ProductRepo.create(productDetail);
 }
 
-export async function updateService(
+export async function updateByIdService(
   id: string,
-  productDetail: Product
-): Promise<ProductEntity> {
-  const user = await UserService.getByIdService(id);
-  const product = { ...productDetail, user: user };
-  return ProductRepo.update(product);
+  productDetail: Partial<Product>
+): Promise<ProductEntity | null> {
+  await getByIdService(id);
+  return ProductRepo.update(id, productDetail);
+}
+
+export async function deleteService(id: string): Promise<string> {
+  await getByIdService(id);
+  return ProductRepo.deleteById(id);
 }

@@ -14,6 +14,20 @@ export async function getAllController(
   }
 }
 
+export async function getByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const user = await ProductService.getByIdService(id);
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function createController(
   req: Request,
   res: Response,
@@ -21,8 +35,37 @@ export async function createController(
 ): Promise<void> {
   try {
     const productDetail = req.body;
-    const createdUser = await ProductService.createService(productDetail);
-    res.json(createdUser);
+    const createdProduct = await ProductService.createService(productDetail);
+    res.json(createdProduct);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const product = req.body;
+    const { id } = req.params;
+    const updatedUser = await ProductService.updateByIdService(id, product);
+    res.json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const message = await ProductService.deleteService(id);
+    res.json(message);
   } catch (err) {
     next(err);
   }

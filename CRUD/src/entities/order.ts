@@ -12,7 +12,7 @@ import { Product } from "./product";
 @Entity("orders")
 export class Order {
   @PrimaryGeneratedColumn("uuid")
-  order_id: string;
+  id: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created_at: Date;

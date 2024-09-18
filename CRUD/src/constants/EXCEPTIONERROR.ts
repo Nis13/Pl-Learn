@@ -9,8 +9,14 @@ export const REQUIRED_MESSAGE = (attribute: string): string =>
 export const USER_DELETE_MESSAGE = (id: string): string =>
   `User of Id: ${id} successfully deleted`;
 
+export const ORDER_DELETE_MESSAGE = (id: string): string =>
+  `Order of Id: ${id} successfully deleted`;
+
+export const ORDER_NOT_FOUND = (id: string): string =>
+  `Order of ID: ${id} not found`;
+
 export const PRODUCT_DELETE_MESSAGE = (id: string): string =>
-  `User of Id: ${id} successfully deleted`;
+  `Product of Id: ${id} successfully deleted`;
 
 export const PRODUCT_NOT_FOUND = (id: string): string =>
-  `User of ID: ${id} not found`;
+  `Product of ID: ${id} not found`;
