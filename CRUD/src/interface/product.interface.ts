@@ -1,4 +1,4 @@
-import { ProductCategory } from "../entities/productCategory";
+import { ProductCategory } from "../entities/productCategory.entity";
 
 export interface Product {
   id?: string;

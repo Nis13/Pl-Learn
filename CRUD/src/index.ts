@@ -1,5 +1,5 @@
 import express from "express";
-import routes from "./routes/route.index";
+import routes from "./routes/index.route";
 import "reflect-metadata";
 import config from "./config";
 import AppDataSource from "./typeORMfile";

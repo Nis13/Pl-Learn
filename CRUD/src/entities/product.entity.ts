@@ -3,11 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { ProductCategory } from "./productCategory";
-import { Order } from "./order";
+import { ProductCategory } from "./productCategory.entity";
+import { Order } from "./order.entity";
 
 @Entity()
 export class Product {
@@ -29,6 +30,6 @@ export class Product {
   @ManyToOne(() => ProductCategory, (pdtCategory) => pdtCategory.products)
   category: ProductCategory;
 
-  @ManyToOne(() => Order, (order) => order.products)
+  @OneToOne(() => Order, (order) => order.product)
   order: Order;
 }

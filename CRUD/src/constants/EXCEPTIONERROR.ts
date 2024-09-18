@@ -20,3 +20,23 @@ export const PRODUCT_DELETE_MESSAGE = (id: string): string =>
 
 export const PRODUCT_NOT_FOUND = (id: string): string =>
   `Product of ID: ${id} not found`;
+
+// // Generic message generator for actions (success, error, etc.)
+// const generateMessage = (entity: string, id: string, message: string): string =>
+//   `${entity} of ID: ${id} ${message}`;
+
+// // Generic not found message for an entity by ID
+// export const ENTITY_NOT_FOUND = (entity: string, id: string): string =>
+//   generateMessage(entity, id, "not found");
+
+// // Generic delete success message for an entity
+// export const ENTITY_DELETED = (entity: string, id: string): string =>
+//   generateMessage(entity, id, "successfully deleted");
+
+// // Generic no entities available message
+// export const NO_ENTITIES_FOUND = (entity: string): string =>
+//   `There are no ${entity}s available`;
+
+// // Required attribute message
+// export const requiredAttributeMessage = (attribute: string): string =>
+//   `${attribute} is required`;

@@ -1,7 +1,7 @@
 import AppDataSource from "../typeORMfile";
-import { Order as OrderEntity } from "../entities/order";
-import { Product } from "../interface/product.interface";
+import { Order as OrderEntity } from "../entities/order.entity";
 import { ORDER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
+import { Order } from "../interface/order.interface";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -15,16 +15,18 @@ export async function getById(id: string): Promise<OrderEntity | null> {
   return orderDetail;
 }
 
-export async function create(orderDetails: Product): Promise<OrderEntity> {
-  const orderCreated = await OrderRepo.save(orderDetails);
+export async function create(orderDetails: Order): Promise<OrderEntity> {
+  const order = await OrderRepo.create(orderDetails);
+  const orderCreated = await OrderRepo.save(order);
   return orderCreated;
 }
 
 export async function update(
+  id: string,
   productDetails: Partial<OrderEntity>
-): Promise<OrderEntity> {
-  const orderUpdated = await OrderRepo.save(productDetails);
-  return orderUpdated;
+): Promise<OrderEntity | null> {
+  await OrderRepo.update(id, productDetails);
+  return await OrderRepo.findOneBy({ id: id });
 }
 
 export async function deleteById(id: string): Promise<string> {

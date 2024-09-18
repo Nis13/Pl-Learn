@@ -1,5 +1,5 @@
 import { PRODUCT_NOT_FOUND } from "../constants/EXCEPTIONERROR";
-import { Product as ProductEntity } from "../entities/product";
+import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
 import { Product } from "../interface/product.interface";
 import * as ProductRepo from "../repository/product.repo";

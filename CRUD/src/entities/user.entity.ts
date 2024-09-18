@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Profile } from "./profile";
-import { Order } from "./order";
+import { Profile } from "./profile.entity";
+import { Order } from "./order.entity";
 
 @Entity()
 export class User {

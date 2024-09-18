@@ -1,5 +1,5 @@
 import { USER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
-import { User as UserEntity } from "../entities/user";
+import { User as UserEntity } from "../entities/user.entity";
 import { User } from "../interface/user.interface";
 import AppDataSource from "../typeORMfile";
 

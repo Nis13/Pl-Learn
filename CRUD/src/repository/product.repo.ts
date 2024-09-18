@@ -1,5 +1,5 @@
 import AppDataSource from "../typeORMfile";
-import { Product as ProductEntity } from "../entities/product";
+import { Product as ProductEntity } from "../entities/product.entity";
 import { Product } from "../interface/product.interface";
 import { PRODUCT_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
 

@@ -1,9 +1,10 @@
 import { NO_USERS_MESSAGE, USER_NOT_FOUND } from "../constants/EXCEPTIONERROR";
 import { NotFoundError } from "../error/NotFoundError";
-import { User, UserUpdateInfo } from "../interface/user.interface";
+import { UserUpdateInfo } from "../interface/user.interface";
 import * as UserRepo from "../repository/user.repo";
-import { User as UserEntity } from "../entities/user";
+import { User as UserEntity } from "../entities/user.entity";
 import loggerWithNameSpace from "../utilis/logger";
+import { CreateUserDTO } from "../DTO/createUser.dto";
 
 const logger = loggerWithNameSpace("UserService");
 
@@ -21,7 +22,7 @@ export async function getByIdService(id: string): Promise<UserEntity> {
   return user;
 }
 
-export function createService(userDetail: User): Promise<UserEntity> {
+export function createService(userDetail: CreateUserDTO): Promise<UserEntity> {
   logger.info("called createUser By Service");
   return UserRepo.create(userDetail);
 }

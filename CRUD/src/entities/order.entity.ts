@@ -4,10 +4,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
-import { User } from "./user";
-import { Product } from "./product";
+import { User } from "./user.entity";
+import { Product } from "./product.entity";
 
 @Entity("orders")
 export class Order {
@@ -23,6 +24,7 @@ export class Order {
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
-  @OneToMany(() => Product, (product) => product.order)
-  products: Product[];
+  @OneToOne(() => Product, (product) => product.order)
+  @JoinColumn()
+  product: Product;
 }
