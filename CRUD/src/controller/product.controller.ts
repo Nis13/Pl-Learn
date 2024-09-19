@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as ProductService from "../services/product.service";
+import loggerWithNameSpace from "../utilis/logger";
+
+const logger = loggerWithNameSpace("ProductController");
 
 export async function getAllController(
   req: Request,
@@ -7,6 +10,7 @@ export async function getAllController(
   next: NextFunction
 ): Promise<void> {
   try {
+    logger.info(`Called getAllController`);
     const products = await ProductService.getAllService();
     res.json(products);
   } catch (err) {
@@ -21,6 +25,7 @@ export async function getByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
+    logger.info(`Called getByIdController to get Product of ID : ${id}`);
     const user = await ProductService.getByIdService(id);
     res.json(user);
   } catch (err) {
@@ -35,6 +40,9 @@ export async function createController(
 ): Promise<void> {
   try {
     const productDetail = req.body;
+    logger.info(
+      `Called createController to create Product with name : ${productDetail.name}`
+    );
     const createdProduct = await ProductService.createService(productDetail);
     res.json(createdProduct);
   } catch (err) {
@@ -50,6 +58,7 @@ export async function updateByIdController(
   try {
     const product = req.body;
     const { id } = req.params;
+    logger.info(`Called updateByIdController to update Prodcut of Id : ${id}`);
     const updatedUser = await ProductService.updateByIdService(id, product);
     res.json(updatedUser);
   } catch (err) {
@@ -64,6 +73,9 @@ export async function deleteByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
+    logger.info(
+      `Called deleteByIdController to delete the Product of ID : ${id}`
+    );
     const message = await ProductService.deleteService(id);
     res.json(message);
   } catch (err) {

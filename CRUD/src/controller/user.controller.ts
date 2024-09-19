@@ -10,7 +10,7 @@ export async function getAllController(
   next: NextFunction
 ): Promise<void> {
   try {
-    logger.info("called getAllUsers By Controller");
+    logger.info("Called getAllUsers By Controller");
     const users = await UserService.getAllService();
     res.json(users);
   } catch (err) {
@@ -25,7 +25,7 @@ export async function getByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info("called getUserByID By Controller");
+    logger.info(`Called getUserByIDController to get User of Id: ${id}`);
     const user = await UserService.getByIdService(id);
     res.json(user);
   } catch (err) {
@@ -40,9 +40,9 @@ export async function createController(
 ): Promise<void> {
   try {
     const userDetail = req.body;
-    console.log(req.body);
-    logger.info("called createUser By Controller");
-    console.log(userDetail);
+    logger.info(
+      `Called createUser to create user with name: ${userDetail.name}`
+    );
     const createdUser = await UserService.createService(userDetail);
     res.json(createdUser);
   } catch (err) {
@@ -58,7 +58,7 @@ export async function updateByIdController(
   try {
     const user = req.body;
     const { id } = req.params;
-    logger.info("called updateUser By Controller");
+    logger.info(`Called updateUser to update user of ID: ${id}`);
     const updatedUser = await UserService.updateByIdService(id, user);
     res.json(updatedUser);
   } catch (err) {
@@ -73,7 +73,7 @@ export async function deleteByIdController(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info("called deleteUser By Controller");
+    logger.info(`Called deleteUser to delete User of Id : ${id}`);
     const message = await UserService.deleteService(id);
     res.json(message);
   } catch (err) {

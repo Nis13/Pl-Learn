@@ -16,14 +16,14 @@ export async function getAllService(): Promise<UserEntity[]> {
 }
 
 export async function getByIdService(id: string): Promise<UserEntity> {
-  logger.info("called getUserByID By Service");
+  logger.info(`Called getUserByID By Service to get user of ID : ${id}`);
   const user = await UserRepo.getById(id);
   if (!user) throw new NotFoundError(USER_NOT_FOUND(id));
   return user;
 }
 
 export function createService(userDetail: CreateUserDTO): Promise<UserEntity> {
-  logger.info("called createUser By Service");
+  logger.info(`Called createUser By Service with email ${userDetail.email}`);
   console.log(userDetail);
   return UserRepo.create(userDetail);
 }
@@ -32,13 +32,13 @@ export async function updateByIdService(
   id: string,
   userDetail: UpdateUserDTO
 ): Promise<UserEntity | null> {
-  logger.info("called updateUser By Service");
+  logger.info(`Called updateUser By Service to update user with ID: ${id}`);
   await getByIdService(id);
   return UserRepo.updateById(id, userDetail);
 }
 
 export async function deleteService(id: string): Promise<string> {
-  logger.info("called deleteUser By Service");
+  logger.info(`Called deleteUser By Service to delete user of ID: ${id}`);
   await getByIdService(id);
   return UserRepo.deleteById(id);
 }
