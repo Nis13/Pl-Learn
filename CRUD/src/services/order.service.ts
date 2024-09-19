@@ -1,10 +1,10 @@
 import { NotFoundError } from "../error/NotFoundError";
 import { Order as OrderEntity } from "../entities/order.entity";
 import * as OrderRepo from "../repository/order.repo";
-import { ORDER_NOT_FOUND } from "../constants/EXCEPTIONERROR";
 import * as UserService from "../services/user.service";
 import * as ProductService from "../services/product.service";
 import loggerWithNameSpace from "../utilis/logger";
+import { ENTITY_NOT_FOUND } from "../constants/Exception";
 
 const logger = loggerWithNameSpace("OrderService");
 
@@ -16,7 +16,10 @@ export function getAllService(): Promise<OrderEntity[]> {
 export async function getByIdService(id: string): Promise<OrderEntity> {
   logger.info(`Called getById to get the Order of ID: ${id}`);
   const order = await OrderRepo.getById(id);
-  if (!order) throw new NotFoundError(ORDER_NOT_FOUND(id));
+  if (!order) {
+    logger.error(ENTITY_NOT_FOUND("Order", id));
+    throw new NotFoundError(ENTITY_NOT_FOUND("Order", id));
+  }
   return order;
 }
 

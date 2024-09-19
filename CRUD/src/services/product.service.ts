@@ -1,4 +1,4 @@
-import { PRODUCT_NOT_FOUND } from "../constants/EXCEPTIONERROR";
+import { ENTITY_NOT_FOUND } from "../constants/Exception";
 import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
@@ -15,7 +15,10 @@ export function getAllService(): Promise<ProductEntity[]> {
 export async function getByIdService(id: string): Promise<ProductEntity> {
   logger.info(`Called getByIdService to get Product info of ID: ${id}`);
   const user = await ProductRepo.getById(id);
-  if (!user) throw new NotFoundError(PRODUCT_NOT_FOUND(id));
+  if (!user) {
+    logger.error(ENTITY_NOT_FOUND("Product", id));
+    throw new NotFoundError(ENTITY_NOT_FOUND("Product", id));
+  }
   return user;
 }
 

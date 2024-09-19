@@ -13,8 +13,8 @@ export async function getAllController(
     logger.info("Called getAllUsers By Controller");
     const users = await UserService.getAllService();
     res.json(users);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }
 
@@ -28,8 +28,8 @@ export async function getByIdController(
     logger.info(`Called getUserByIDController to get User of Id: ${id}`);
     const user = await UserService.getByIdService(id);
     res.json(user);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }
 
@@ -45,8 +45,8 @@ export async function createController(
     );
     const createdUser = await UserService.createService(userDetail);
     res.json(createdUser);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }
 
@@ -61,8 +61,8 @@ export async function updateByIdController(
     logger.info(`Called updateUser to update user of ID: ${id}`);
     const updatedUser = await UserService.updateByIdService(id, user);
     res.json(updatedUser);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }
 
@@ -76,7 +76,7 @@ export async function deleteByIdController(
     logger.info(`Called deleteUser to delete User of Id : ${id}`);
     const message = await UserService.deleteService(id);
     res.json(message);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }

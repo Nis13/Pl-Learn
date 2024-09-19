@@ -1,4 +1,4 @@
-import { USER_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
+import { ENTITY_DELETED } from "../constants/Exception";
 import { UpdateUserDTO } from "../DTO/updateUser.dto";
 import { User as UserEntity } from "../entities/user.entity";
 import AppDataSource from "../typeORMfile";
@@ -43,5 +43,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   await UserRepo.delete(id);
-  return USER_DELETE_MESSAGE(id);
+  return ENTITY_DELETED("User", id);
 }

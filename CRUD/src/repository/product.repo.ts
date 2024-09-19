@@ -1,7 +1,7 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
-import { PRODUCT_DELETE_MESSAGE } from "../constants/EXCEPTIONERROR";
 import { CreateProductDTO } from "../DTO/createProduct.dto";
+import { ENTITY_DELETED } from "../constants/Exception";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -33,5 +33,5 @@ export async function update(
 
 export async function deleteById(id: string): Promise<string> {
   await ProductRepo.delete(id);
-  return PRODUCT_DELETE_MESSAGE(id);
+  return ENTITY_DELETED("Product", id);
 }
