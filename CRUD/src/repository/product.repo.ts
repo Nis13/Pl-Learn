@@ -1,6 +1,5 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
-import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { ENTITY_DELETED } from "../constants/Exception";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
@@ -16,7 +15,7 @@ export async function getById(id: string): Promise<ProductEntity | null> {
 }
 
 export async function create(
-  productDetails: CreateProductDTO
+  productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity> {
   const product = ProductRepo.create(productDetails);
   const productInserted = await ProductRepo.save(product);
@@ -25,7 +24,7 @@ export async function create(
 
 export async function update(
   id: string,
-  productDetails: Partial<CreateProductDTO>
+  productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
   await ProductRepo.update(id, productDetails);
   return await ProductRepo.findOneBy({ id: id });

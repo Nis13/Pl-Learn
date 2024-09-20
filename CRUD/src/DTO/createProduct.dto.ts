@@ -1,4 +1,12 @@
-import { IsNumber, IsString, Length, IsPositive } from "class-validator";
+import {
+  IsNumber,
+  IsString,
+  Length,
+  IsPositive,
+  IsOptional,
+  IsUUID,
+  IsArray,
+} from "class-validator";
 
 export class CreateProductDTO {
   @IsString()
@@ -8,4 +16,9 @@ export class CreateProductDTO {
   @IsNumber({}, { message: "Price must be a number" })
   @IsPositive({ message: "Price must be a positive number" })
   price: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID("4", { each: true })
+  category?: string[];
 }
