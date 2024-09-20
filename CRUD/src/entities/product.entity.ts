@@ -2,12 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  JoinTable,
+  ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { ProductCategory } from "./productCategory.entity";
+import { Category } from "./category.entity";
 import { Order } from "./order.entity";
 
 @Entity()
@@ -27,8 +28,19 @@ export class Product {
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
 
-  @ManyToOne(() => ProductCategory, (pdtCategory) => pdtCategory.products)
-  category: ProductCategory;
+  @ManyToMany(() => Category, (pdtCategory) => pdtCategory.products)
+  @JoinTable({
+    name: "product_categories",
+    joinColumn: {
+      name: "category_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "product_id",
+      referencedColumnName: "id",
+    },
+  })
+  category: Category[];
 
   @OneToOne(() => Order, (order) => order.product)
   order: Order;
