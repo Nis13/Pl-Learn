@@ -13,23 +13,23 @@ import { Category } from "../entities/category.entity";
 const logger = loggerWithNameSpace("ProductService");
 
 export async function getAll(): Promise<ProductEntity[]> {
-  logger.info(`Calling getAll`);
+  logger.info("Fetching all products.");
   const products = await ProductRepo.getAll();
   if (products.length == 0) {
     logger.warn(NO_ENTITIES_FOUND("Product"));
     throw new NotFoundError(NO_ENTITIES_FOUND("Product"));
   }
-  return ProductRepo.getAll();
+  return products;
 }
 
 export async function getById(id: string): Promise<ProductEntity> {
-  logger.info(`Calling getByIdService to get Product info of ID: ${id}`);
-  const user = await ProductRepo.getById(id);
-  if (!user) {
+  logger.info(`Fetching product with ID: ${id}`);
+  const product = await ProductRepo.getById(id);
+  if (!product) {
     logger.error(ENTITY_NOT_FOUND("Product", id));
     throw new NotFoundError(ENTITY_NOT_FOUND("Product", id));
   }
-  return user;
+  return product;
 }
 
 /**
@@ -43,9 +43,7 @@ export async function getById(id: string): Promise<ProductEntity> {
 export async function create(
   productDetail: CreateProductDTO
 ): Promise<ProductEntity> {
-  logger.info(
-    `Calling create to create Product with name: ${productDetail.name}`
-  );
+  logger.info(`Creating product with name: ${productDetail.name}`);
   const { category, ...product } = productDetail;
   const categoryArray: Category[] = [];
   if (category) {
@@ -63,13 +61,13 @@ export async function updateById(
   id: string,
   productDetail: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  logger.info(`Called updateService to update Product with ID : ${id}`);
+  logger.info(`Updating product with ID: ${id}`);
   await getById(id);
   return ProductRepo.updateById(id, productDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Called deleteService to delete Product of Id: ${id}`);
+  logger.info(`Deleting product with ID: ${id}`);
   await getById(id);
   return ProductRepo.deleteById(id);
 }
@@ -78,9 +76,9 @@ export async function addCategoryToProduct(
   productId: string,
   categoryId: string
 ) {
+  logger.info(`Adding category ID: ${categoryId} to product ID: ${productId}`);
   const product = await getById(productId);
   const category = await CategoryService.getById(categoryId);
   product.category.push(category);
-  console.log(product);
   return updateById(productId, product);
 }

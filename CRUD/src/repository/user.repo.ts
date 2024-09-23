@@ -6,17 +6,15 @@ import AppDataSource from "../typeORMfile";
 const UserRepo = AppDataSource.getRepository(UserEntity);
 
 export async function getAll(): Promise<UserEntity[]> {
-  const allUsers = await UserRepo.find({
+  return await UserRepo.find({
     relations: {
       profile: true,
     },
   });
-  return allUsers;
 }
 
 export async function getById(id: string): Promise<UserEntity | null> {
-  const userDetail = await UserRepo.findOneBy({ id: id });
-  return userDetail;
+  return await UserRepo.findOneBy({ id: id });
 }
 
 export async function create(
@@ -29,8 +27,7 @@ export async function create(
     profile: userProfile,
   };
   const createUser = UserRepo.create(userCreate);
-  const userInserted = await UserRepo.save(createUser);
-  return userInserted;
+  return await UserRepo.save(createUser);
 }
 
 export async function updateById(

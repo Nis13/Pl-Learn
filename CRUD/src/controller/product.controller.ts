@@ -21,8 +21,8 @@ export async function getById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const userById = await ProductService.getById(id);
-    res.json(userById);
+    const productById = await ProductService.getById(id);
+    res.json(productById);
   } catch (err) {
     next(err);
   }
@@ -48,8 +48,8 @@ export async function updateById(
   next: NextFunction
 ): Promise<void> {
   try {
-    const product = req.body;
     const { id } = req.params;
+    const product = req.body;
     const updatedUser = await ProductService.updateById(id, product);
     res.json(updatedUser);
   } catch (err) {

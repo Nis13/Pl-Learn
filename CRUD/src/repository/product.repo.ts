@@ -5,24 +5,21 @@ import { ENTITY_DELETED } from "../constants/exceptionMessage";
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
 export async function getAll(): Promise<ProductEntity[]> {
-  const allProducts = await ProductRepo.find();
-  return allProducts;
+  return await ProductRepo.find();
 }
 
 export async function getById(id: string): Promise<ProductEntity | null> {
-  const productDetail = await ProductRepo.findOne({
+  return await ProductRepo.findOne({
     where: { id: id },
     relations: ["category"],
   });
-  return productDetail;
 }
 
 export async function create(
   productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity> {
   const product = ProductRepo.create(productDetails);
-  const productInserted = await ProductRepo.save(product);
-  return productInserted;
+  return await ProductRepo.save(product);
 }
 
 export async function updateById(

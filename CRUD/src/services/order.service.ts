@@ -12,17 +12,17 @@ import {
 const logger = loggerWithNameSpace("OrderService");
 
 export async function getAll(): Promise<OrderEntity[]> {
-  logger.info(`Calling getAll of Order`);
+  logger.info("Fetching all orders");
   const products = await OrderRepo.getAll();
   if (products.length == 0) {
     logger.warn(NO_ENTITIES_FOUND("Order"));
     throw new NotFoundError(NO_ENTITIES_FOUND("Order"));
   }
-  return OrderRepo.getAll();
+  return products;
 }
 
 export async function getById(id: string): Promise<OrderEntity> {
-  logger.info(`Calling getById to get the Order of ID: ${id}`);
+  logger.info(`Fetching order with ID: ${id}`);
   const order = await OrderRepo.getById(id);
   if (!order) {
     logger.error(ENTITY_NOT_FOUND("Order", id));
@@ -45,7 +45,7 @@ export async function create(
   productId: string
 ): Promise<OrderEntity> {
   logger.info(
-    `Calling create to create Order by user of Id: ${userId} to place order for produst of Id:${productId}`
+    `Creating order for user ID: ${userId} and product ID: ${productId}`
   );
   const user = await UserService.getById(userId);
   const product = await ProductService.getById(productId);
@@ -57,13 +57,13 @@ export async function updateById(
   id: string,
   orderDetail: Partial<OrderEntity>
 ): Promise<OrderEntity | null> {
-  logger.info(`Calling updateById to update the Order with Id: ${id}`);
+  logger.info(`Updating order with ID: ${id}`);
   await getById(id);
   return OrderRepo.updateById(id, orderDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Calling delete to delete the Order with ID: ${id}`);
+  logger.info(`Deleting order with ID: ${id}`);
   await getById(id);
   return OrderRepo.deleteById(id);
 }

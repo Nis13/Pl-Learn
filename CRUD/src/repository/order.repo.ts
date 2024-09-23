@@ -5,21 +5,18 @@ import { ENTITY_DELETED } from "../constants/exceptionMessage";
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
 export async function getAll(): Promise<OrderEntity[]> {
-  const allOrders = await OrderRepo.find();
-  return allOrders;
+  return await OrderRepo.find();
 }
 
 export async function getById(id: string): Promise<OrderEntity | null> {
-  const orderDetail = await OrderRepo.findOneBy({ id: id });
-  return orderDetail;
+  return await OrderRepo.findOneBy({ id: id });
 }
 
 export async function create(
   orderDetails: Partial<OrderEntity>
 ): Promise<OrderEntity> {
   const order = OrderRepo.create(orderDetails);
-  const orderCreated = await OrderRepo.save(order);
-  return orderCreated;
+  return await OrderRepo.save(order);
 }
 
 export async function updateById(

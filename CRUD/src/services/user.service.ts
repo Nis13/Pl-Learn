@@ -19,7 +19,7 @@ const logger = loggerWithNameSpace("UserService");
  * @returns {Promise<UserEntity[]>}
  */
 export async function getAll(): Promise<UserEntity[]> {
-  logger.info("Calling getAllUsers");
+  logger.info("Fetching all users");
   const users = await UserRepo.getAll();
   if (users.length == 0) {
     logger.warn(NO_ENTITIES_FOUND("User"));
@@ -29,7 +29,7 @@ export async function getAll(): Promise<UserEntity[]> {
 }
 
 export async function getById(id: string): Promise<UserEntity> {
-  logger.info(`Calling getByID to get user of ID : ${id}`);
+  logger.info(`Fetching user with ID: ${id}`);
   const user = await UserRepo.getById(id);
   if (!user) {
     logger.error(ENTITY_NOT_FOUND("User", id));
@@ -39,7 +39,7 @@ export async function getById(id: string): Promise<UserEntity> {
 }
 
 export function create(userDetail: CreateUserDTO): Promise<UserEntity> {
-  logger.info(`Calling create with email ${userDetail.email}`);
+  logger.info(`Creating a new user with email: ${userDetail.email}`);
   return UserRepo.create(userDetail);
 }
 
@@ -47,13 +47,13 @@ export async function updateById(
   id: string,
   userDetail: UpdateUserDTO
 ): Promise<UserEntity | null> {
-  logger.info(`Calling update for user with ID: ${id}`);
+  logger.info(`Updating user with ID: ${id}`);
   await getById(id);
   return UserRepo.updateById(id, userDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Calling delete with user of ID: ${id}`);
+  logger.info(`Deleting user with ID: ${id}`);
   await getById(id);
   return UserRepo.deleteById(id);
 }
