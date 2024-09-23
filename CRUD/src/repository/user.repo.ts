@@ -21,13 +21,13 @@ export async function create(
   userDetails: Partial<UserEntity>
 ): Promise<UserEntity> {
   const { name, email, ...userProfile } = userDetails;
-  const userCreate = {
+  const userToCreate = {
     name: name,
     email: email,
     profile: userProfile,
   };
-  const createUser = UserRepo.create(userCreate);
-  return await UserRepo.save(createUser);
+  const createdUser = UserRepo.create(userToCreate);
+  return await UserRepo.save(createdUser);
 }
 
 export async function updateById(

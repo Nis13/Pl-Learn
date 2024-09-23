@@ -1,32 +1,15 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Category } from "./category.entity";
 import { Order } from "./order.entity";
+import { BaseEntity } from "./base.entity";
 
 @Entity()
-export class Product {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
+export class Product extends BaseEntity {
   @Column("varchar", { length: 200 })
   name: string;
 
   @Column()
   price: number;
-
-  @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
 
   @ManyToMany(() => Category, (pdtCategory) => pdtCategory.products)
   @JoinTable({
