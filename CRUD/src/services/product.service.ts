@@ -1,4 +1,4 @@
-import { ENTITY_NOT_FOUND } from "../constants/Exception";
+import { ENTITY_NOT_FOUND, NO_ENTITIES_FOUND } from "../constants/Exception";
 import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
@@ -9,8 +9,13 @@ import { Category } from "../entities/category.entity";
 
 const logger = loggerWithNameSpace("ProductService");
 
-export function getAllService(): Promise<ProductEntity[]> {
+export async function getAllService(): Promise<ProductEntity[]> {
   logger.info(`Called getAllService`);
+  const products = await ProductRepo.getAll();
+  if (products.length == 0) {
+    logger.warn(NO_ENTITIES_FOUND("Product"));
+    throw new NotFoundError(NO_ENTITIES_FOUND("Product"));
+  }
   return ProductRepo.getAll();
 }
 

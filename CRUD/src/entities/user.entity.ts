@@ -10,7 +10,6 @@ import {
 } from "typeorm";
 import { Profile } from "./profile.entity";
 import { Order } from "./order.entity";
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")

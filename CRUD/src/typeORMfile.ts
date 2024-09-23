@@ -9,7 +9,6 @@ const AppDataSource = new DataSource({
   database: config.database.name,
   entities: ["src/entities/*{.ts,.js}"],
   synchronize: true,
-  logging: true,
 });
 
 export default AppDataSource;

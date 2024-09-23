@@ -1,5 +1,44 @@
 import { IsEmail, IsNotEmpty, IsString, Length, IsEnum } from "class-validator";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     createUserSchema:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - gender
+ *         - bio
+ *       properties:
+ *         name:
+ *           type: string
+ *           default: Jane Doe
+ *         email:
+ *           type: string
+ *           default: jane.doe@example.com
+ *         gender:
+ *           type: string
+ *           default: Male
+ *         bio:
+ *           type: string
+ *           default: Here is my short bio
+ *     createUserResponse:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         id:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ */
+
 export class CreateUserDTO {
   @IsNotEmpty({ message: "Name should not be empty" })
   @IsString({ message: "Name must be a string" })

@@ -4,12 +4,17 @@ import * as OrderRepo from "../repository/order.repo";
 import * as UserService from "../services/user.service";
 import * as ProductService from "../services/product.service";
 import loggerWithNameSpace from "../utilis/logger";
-import { ENTITY_NOT_FOUND } from "../constants/Exception";
+import { ENTITY_NOT_FOUND, NO_ENTITIES_FOUND } from "../constants/Exception";
 
 const logger = loggerWithNameSpace("OrderService");
 
-export function getAllService(): Promise<OrderEntity[]> {
+export async function getAllService(): Promise<OrderEntity[]> {
   logger.info(`Called getAllService of Order`);
+  const products = await OrderRepo.getAll();
+  if (products.length == 0) {
+    logger.warn(NO_ENTITIES_FOUND("Order"));
+    throw new NotFoundError(NO_ENTITIES_FOUND("Order"));
+  }
   return OrderRepo.getAll();
 }
 
