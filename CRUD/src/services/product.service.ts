@@ -3,7 +3,7 @@ import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
 import * as ProductRepo from "../repository/product.repo";
-import * as CategoryRepo from "../repository/category.repo";
+import * as CategoryService from "../services/category.service";
 import loggerWithNameSpace from "../utilis/logger";
 import { Category } from "../entities/category.entity";
 
@@ -42,10 +42,7 @@ export async function createService(
   const categoryArray: Category[] = [];
   if (category) {
     for (const categoryId of category) {
-      const categoryItem = await CategoryRepo.getById(categoryId);
-      if (!categoryItem) {
-        throw new NotFoundError(ENTITY_NOT_FOUND("Category", categoryId));
-      }
+      const categoryItem = await CategoryService.getById(categoryId);
       categoryArray.push(categoryItem);
     }
   }
@@ -67,4 +64,15 @@ export async function deleteService(id: string): Promise<string> {
   logger.info(`Called deleteService to delete product of Id: ${id}`);
   await getByIdService(id);
   return ProductRepo.deleteById(id);
+}
+
+export async function addCategoryToProduct(
+  productId: string,
+  categoryId: string
+) {
+  const product = await getByIdService(productId);
+  const category = await CategoryService.getById(categoryId);
+  product.category.push(category);
+  console.log(product);
+  return updateByIdService(productId, product);
 }
