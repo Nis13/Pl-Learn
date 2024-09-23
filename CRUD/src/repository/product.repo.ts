@@ -1,6 +1,6 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
-import { ENTITY_DELETED } from "../constants/Exception";
+import { ENTITY_DELETED } from "../constants/exceptionMessage";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -25,7 +25,7 @@ export async function create(
   return productInserted;
 }
 
-export async function update(
+export async function updateById(
   id: string,
   productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {

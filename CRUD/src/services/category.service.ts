@@ -1,4 +1,4 @@
-import { NO_ENTITIES_FOUND } from "../constants/Exception";
+import { NO_ENTITIES_FOUND } from "../constants/exceptionMessage";
 import { Category } from "../entities/category.entity";
 import { NotFoundError } from "../error/NotFoundError";
 import * as CategoryRepo from "../repository/category.repo";

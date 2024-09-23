@@ -1,4 +1,7 @@
-import { ENTITY_NOT_FOUND, NO_ENTITIES_FOUND } from "../constants/Exception";
+import {
+  ENTITY_NOT_FOUND,
+  NO_ENTITIES_FOUND,
+} from "../constants/exceptionMessage";
 import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { NotFoundError } from "../error/NotFoundError";
@@ -9,8 +12,8 @@ import { Category } from "../entities/category.entity";
 
 const logger = loggerWithNameSpace("ProductService");
 
-export async function getAllService(): Promise<ProductEntity[]> {
-  logger.info(`Called getAllService`);
+export async function getAll(): Promise<ProductEntity[]> {
+  logger.info(`Calling getAll`);
   const products = await ProductRepo.getAll();
   if (products.length == 0) {
     logger.warn(NO_ENTITIES_FOUND("Product"));
@@ -19,8 +22,8 @@ export async function getAllService(): Promise<ProductEntity[]> {
   return ProductRepo.getAll();
 }
 
-export async function getByIdService(id: string): Promise<ProductEntity> {
-  logger.info(`Called getByIdService to get Product info of ID: ${id}`);
+export async function getById(id: string): Promise<ProductEntity> {
+  logger.info(`Calling getByIdService to get Product info of ID: ${id}`);
   const user = await ProductRepo.getById(id);
   if (!user) {
     logger.error(ENTITY_NOT_FOUND("Product", id));
@@ -37,11 +40,11 @@ export async function getByIdService(id: string): Promise<ProductEntity> {
  * @param {CreateProductDTO} productDetail
  * @returns {Promise<ProductEntity>}
  */
-export async function createService(
+export async function create(
   productDetail: CreateProductDTO
 ): Promise<ProductEntity> {
   logger.info(
-    `Called createService to create Product with name: ${productDetail.name}`
+    `Calling create to create Product with name: ${productDetail.name}`
   );
   const { category, ...product } = productDetail;
   const categoryArray: Category[] = [];
@@ -56,18 +59,18 @@ export async function createService(
   return ProductRepo.create(productCreate);
 }
 
-export async function updateByIdService(
+export async function updateById(
   id: string,
   productDetail: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
   logger.info(`Called updateService to update Product with ID : ${id}`);
-  await getByIdService(id);
-  return ProductRepo.update(id, productDetail);
+  await getById(id);
+  return ProductRepo.updateById(id, productDetail);
 }
 
-export async function deleteService(id: string): Promise<string> {
-  logger.info(`Called deleteService to delete product of Id: ${id}`);
-  await getByIdService(id);
+export async function deleteById(id: string): Promise<string> {
+  logger.info(`Called deleteService to delete Product of Id: ${id}`);
+  await getById(id);
   return ProductRepo.deleteById(id);
 }
 
@@ -75,9 +78,9 @@ export async function addCategoryToProduct(
   productId: string,
   categoryId: string
 ) {
-  const product = await getByIdService(productId);
+  const product = await getById(productId);
   const category = await CategoryService.getById(categoryId);
   product.category.push(category);
   console.log(product);
-  return updateByIdService(productId, product);
+  return updateById(productId, product);
 }

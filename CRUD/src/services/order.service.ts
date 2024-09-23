@@ -4,12 +4,15 @@ import * as OrderRepo from "../repository/order.repo";
 import * as UserService from "../services/user.service";
 import * as ProductService from "../services/product.service";
 import loggerWithNameSpace from "../utilis/logger";
-import { ENTITY_NOT_FOUND, NO_ENTITIES_FOUND } from "../constants/Exception";
+import {
+  ENTITY_NOT_FOUND,
+  NO_ENTITIES_FOUND,
+} from "../constants/exceptionMessage";
 
 const logger = loggerWithNameSpace("OrderService");
 
-export async function getAllService(): Promise<OrderEntity[]> {
-  logger.info(`Called getAllService of Order`);
+export async function getAll(): Promise<OrderEntity[]> {
+  logger.info(`Calling getAll of Order`);
   const products = await OrderRepo.getAll();
   if (products.length == 0) {
     logger.warn(NO_ENTITIES_FOUND("Order"));
@@ -18,8 +21,8 @@ export async function getAllService(): Promise<OrderEntity[]> {
   return OrderRepo.getAll();
 }
 
-export async function getByIdService(id: string): Promise<OrderEntity> {
-  logger.info(`Called getById to get the Order of ID: ${id}`);
+export async function getById(id: string): Promise<OrderEntity> {
+  logger.info(`Calling getById to get the Order of ID: ${id}`);
   const order = await OrderRepo.getById(id);
   if (!order) {
     logger.error(ENTITY_NOT_FOUND("Order", id));
@@ -37,30 +40,30 @@ export async function getByIdService(id: string): Promise<OrderEntity> {
  * @param {string} productId
  * @returns {Promise<OrderEntity>}
  */
-export async function createService(
+export async function create(
   userId: string,
   productId: string
 ): Promise<OrderEntity> {
   logger.info(
-    `Called createService to create Order by user of Id: ${userId} to place order for produst of Id:${productId}`
+    `Calling create to create Order by user of Id: ${userId} to place order for produst of Id:${productId}`
   );
-  const user = await UserService.getByIdService(userId);
-  const product = await ProductService.getByIdService(productId);
+  const user = await UserService.getById(userId);
+  const product = await ProductService.getById(productId);
   const orderDetail = { user: user, product: product };
   return OrderRepo.create(orderDetail);
 }
 
-export async function updateByIdService(
+export async function updateById(
   id: string,
   orderDetail: Partial<OrderEntity>
 ): Promise<OrderEntity | null> {
-  logger.info(`Called uodateByIdService to update the Order with Id: ${id}`);
-  await getByIdService(id);
-  return OrderRepo.update(id, orderDetail);
+  logger.info(`Calling updateById to update the Order with Id: ${id}`);
+  await getById(id);
+  return OrderRepo.updateById(id, orderDetail);
 }
 
-export async function deleteService(id: string): Promise<string> {
-  logger.info(`Called deleteService to delete the Order with ID: ${id}`);
-  await getByIdService(id);
+export async function deleteById(id: string): Promise<string> {
+  logger.info(`Calling delete to delete the Order with ID: ${id}`);
+  await getById(id);
   return OrderRepo.deleteById(id);
 }

@@ -1,4 +1,4 @@
-import { ENTITY_DELETED } from "../constants/Exception";
+import { ENTITY_DELETED } from "../constants/exceptionMessage";
 import { UpdateUserDTO } from "../DTO/updateUser.dto";
 import { User as UserEntity } from "../entities/user.entity";
 import AppDataSource from "../typeORMfile";

@@ -1,80 +1,70 @@
 import { NextFunction, Request, Response } from "express";
 import * as UserService from "../services/user.service";
-import loggerWithNameSpace from "../utilis/logger";
 
-const logger = loggerWithNameSpace("UserController");
-
-export async function getAllController(
+export async function getAll(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    logger.info("Called getAllUsers By Controller");
-    const users = await UserService.getAllService();
+    const users = await UserService.getAll();
     res.json(users);
   } catch (error) {
     next(error);
   }
 }
 
-export async function getByIdController(
+export async function getById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info(`Called getUserByIDController to get User of Id: ${id}`);
-    const user = await UserService.getByIdService(id);
-    res.json(user);
+    const userById = await UserService.getById(id);
+    res.json(userById);
   } catch (error) {
     next(error);
   }
 }
 
-export async function createController(
+export async function create(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const userDetail = req.body;
-    logger.info(
-      `Called createUser to create user with name: ${userDetail.name}`
-    );
-    const createdUser = await UserService.createService(userDetail);
+    const createdUser = await UserService.create(userDetail);
     res.json(createdUser);
   } catch (error) {
     next(error);
   }
 }
 
-export async function updateByIdController(
+export async function updateById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = req.body;
     const { id } = req.params;
-    logger.info(`Called updateUser to update user of ID: ${id}`);
-    const updatedUser = await UserService.updateByIdService(id, user);
+    const user = req.body;
+    const updatedUser = await UserService.updateById(id, user);
     res.json(updatedUser);
   } catch (error) {
     next(error);
   }
 }
 
-export async function deleteByIdController(
+export async function deleteById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info(`Called deleteUser to delete User of Id : ${id}`);
-    const message = await UserService.deleteService(id);
+    const message = await UserService.deleteById(id);
     res.json(message);
   } catch (error) {
     next(error);

@@ -5,7 +5,7 @@ import { validationPipe } from "../utilis/validation";
 export const validationMiddleware =
   (validationSchema: any) =>
   async (req: Request, res: Response, next: NextFunction) => {
-    const result: any = await validationPipe(validationSchema, {
+    const result = await validationPipe(validationSchema, {
       ...req.body,
       ...req.params,
     });

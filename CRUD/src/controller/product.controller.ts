@@ -1,56 +1,48 @@
 import { NextFunction, Request, Response } from "express";
 import * as ProductService from "../services/product.service";
-import loggerWithNameSpace from "../utilis/logger";
 
-const logger = loggerWithNameSpace("ProductController");
-
-export async function getAllController(
+export async function getAll(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    logger.info(`Called getAllController`);
-    const products = await ProductService.getAllService();
-    res.json(products);
+    const allProducts = await ProductService.getAll();
+    res.json(allProducts);
   } catch (err) {
     next(err);
   }
 }
 
-export async function getByIdController(
+export async function getById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info(`Called getByIdController to get Product of ID : ${id}`);
-    const user = await ProductService.getByIdService(id);
-    res.json(user);
+    const userById = await ProductService.getById(id);
+    res.json(userById);
   } catch (err) {
     next(err);
   }
 }
 
-export async function createController(
+export async function create(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const productDetail = req.body;
-    logger.info(
-      `Called createController to create Product with name : ${productDetail.name}`
-    );
-    const createdProduct = await ProductService.createService(productDetail);
+    const createdProduct = await ProductService.create(productDetail);
     res.json(createdProduct);
   } catch (err) {
     next(err);
   }
 }
 
-export async function updateByIdController(
+export async function updateById(
   req: Request,
   res: Response,
   next: NextFunction
@@ -58,25 +50,21 @@ export async function updateByIdController(
   try {
     const product = req.body;
     const { id } = req.params;
-    logger.info(`Called updateByIdController to update Prodcut of Id : ${id}`);
-    const updatedUser = await ProductService.updateByIdService(id, product);
+    const updatedUser = await ProductService.updateById(id, product);
     res.json(updatedUser);
   } catch (err) {
     next(err);
   }
 }
 
-export async function deleteByIdController(
+export async function deleteById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const { id } = req.params;
-    logger.info(
-      `Called deleteByIdController to delete the Product of ID : ${id}`
-    );
-    const message = await ProductService.deleteService(id);
+    const message = await ProductService.deleteById(id);
     res.json(message);
   } catch (err) {
     next(err);
@@ -91,9 +79,6 @@ export async function addCategoryToProduct(
   try {
     const { id } = req.params;
     const { categoryId } = req.body;
-    logger.info(
-      `Called addCategoryToProduct to add the Category ${categoryId} to the Product of ID : ${id}`
-    );
     const message = await ProductService.addCategoryToProduct(id, categoryId);
     res.json(message);
   } catch (err) {

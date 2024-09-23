@@ -28,7 +28,7 @@ const router = express();
  *                   type: string
  *                   example: "There are no Products available"
  */
-router.get("/", OrderController.getAllController);
+router.get("/", OrderController.getAll);
 
 /**
  * @openapi
@@ -58,7 +58,7 @@ router.get("/", OrderController.getAllController);
  *                   type: string
  *                   example: "Order of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
  */
-router.get("/:id", OrderController.getByIdController);
+router.get("/:id", OrderController.getById);
 
 /**
  * @openapi
@@ -81,38 +81,9 @@ router.get("/:id", OrderController.getByIdController);
  *       400:
  *         description: Bad Request Error
  */
-router.post("/", OrderController.createController);
+router.post("/", OrderController.create);
 
-/**
- * @openapi
- * /order/{id}:
- *   put:
- *     summary: updates the existing order
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/createOrderSchema"
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/createOrderResponse'
- *       404:
- *         description: Not found Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Product of ID: c6cc6f98-cdda-45ba-a20e-6a033cb778d4 notfound"
- */
-router.put("/:id", OrderController.updateByIdController);
+// router.put("/:id", OrderController.updateByIdController);
 
 /**
  * @openapi
@@ -134,7 +105,7 @@ router.put("/:id", OrderController.updateByIdController);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "POrder of ID: c6cc6f98-cdda-45ba-a20e-6a033cb778d4 successfully deleted"
+ *                   example: "Order of ID: c6cc6f98-cdda-45ba-a20e-6a033cb778d4 successfully deleted"
  *       404:
  *          description: Order not found
  *          content:
@@ -146,6 +117,6 @@ router.put("/:id", OrderController.updateByIdController);
  *                   type: string
  *                   example: "Order of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
  */
-router.delete("/:id", OrderController.deleteByIdController);
+router.delete("/:id", OrderController.deleteById);
 
 export default router;

@@ -24,7 +24,7 @@ const router = express();
  *                   type: string
  *                   example: "There are no Products available"
  */
-router.get("/", ProductController.getAllController);
+router.get("/", ProductController.getAll);
 
 /**
  * @openapi
@@ -54,7 +54,7 @@ router.get("/", ProductController.getAllController);
  *                   type: string
  *                   example: "Product of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
  */
-router.get("/:id", ProductController.getByIdController);
+router.get("/:id", ProductController.getById);
 
 /**
  * @openapi
@@ -80,7 +80,7 @@ router.get("/:id", ProductController.getByIdController);
 router.post(
   "/",
   validationMiddleware(CreateProductDTO),
-  ProductController.createController
+  ProductController.create
 );
 
 /**
@@ -115,7 +115,7 @@ router.post(
 router.put(
   "/:id",
   validationMiddleware(UpdateProductDTO),
-  ProductController.updateByIdController
+  ProductController.updateById
 );
 
 /**
@@ -142,7 +142,7 @@ router.put(
  *       404:
  *          description: Product not found
  */
-router.delete("/:id", ProductController.deleteByIdController);
+router.delete("/:id", ProductController.deleteById);
 
 /**
  * @openapi

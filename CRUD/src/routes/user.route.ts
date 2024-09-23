@@ -16,7 +16,7 @@ const router = express();
  *       404:
  *         description: Users not found
  */
-router.get("/", userRoutes.getAllController);
+router.get("/", userRoutes.getAll);
 
 /**
  * @openapi
@@ -39,7 +39,7 @@ router.get("/", userRoutes.getAllController);
  *          description: Not found
  */
 
-router.get("/:id", userRoutes.getByIdController);
+router.get("/:id", userRoutes.getById);
 
 /**
  * @openapi
@@ -62,11 +62,7 @@ router.get("/:id", userRoutes.getByIdController);
  *       400:
  *         description: Bad Request Error
  */
-router.post(
-  "/",
-  validationMiddleware(CreateUserDTO),
-  userRoutes.createController
-);
+router.post("/", validationMiddleware(CreateUserDTO), userRoutes.create);
 
 /**
  * @openapi
@@ -89,11 +85,7 @@ router.post(
  *       400:
  *         description: Bad Request Error
  */
-router.put(
-  "/:id",
-  validationMiddleware(UpdateUserDTO),
-  userRoutes.updateByIdController
-);
+router.put("/:id", validationMiddleware(UpdateUserDTO), userRoutes.updateById);
 
 /**
  * @openapi
@@ -119,6 +111,6 @@ router.put(
  *       404:
  *          description: User not found
  */
-router.delete("/:id", userRoutes.deleteByIdController);
+router.delete("/:id", userRoutes.deleteById);
 
 export default router;

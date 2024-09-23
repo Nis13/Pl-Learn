@@ -1,6 +1,6 @@
 import AppDataSource from "../typeORMfile";
 import { Order as OrderEntity } from "../entities/order.entity";
-import { ENTITY_DELETED } from "../constants/Exception";
+import { ENTITY_DELETED } from "../constants/exceptionMessage";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -22,7 +22,7 @@ export async function create(
   return orderCreated;
 }
 
-export async function update(
+export async function updateById(
   id: string,
   productDetails: Partial<OrderEntity>
 ): Promise<OrderEntity | null> {

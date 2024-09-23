@@ -1,6 +1,6 @@
 import { Category } from "../entities/category.entity";
 import AppDataSource from "../typeORMfile";
-import { ENTITY_DELETED } from "../constants/Exception";
+import { ENTITY_DELETED } from "../constants/exceptionMessage";
 
 const CatergoryRepo = AppDataSource.getRepository(Category);
 
