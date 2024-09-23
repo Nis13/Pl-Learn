@@ -82,3 +82,21 @@ export async function deleteByIdController(
     next(err);
   }
 }
+
+export async function addCategoryToProduct(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { categoryId } = req.body;
+    logger.info(
+      `Called addCategoryToProduct to add the Category ${categoryId} to the Product of ID : ${id}`
+    );
+    const message = await ProductService.addCategoryToProduct(id, categoryId);
+    res.json(message);
+  } catch (err) {
+    next(err);
+  }
+}

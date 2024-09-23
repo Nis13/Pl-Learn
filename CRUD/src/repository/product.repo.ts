@@ -10,7 +10,10 @@ export async function getAll(): Promise<ProductEntity[]> {
 }
 
 export async function getById(id: string): Promise<ProductEntity | null> {
-  const productDetail = await ProductRepo.findOneBy({ id: id });
+  const productDetail = await ProductRepo.findOne({
+    where: { id: id },
+    relations: ["category"],
+  });
   return productDetail;
 }
 
@@ -26,8 +29,12 @@ export async function update(
   id: string,
   productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  await ProductRepo.update(id, productDetails);
-  return await ProductRepo.findOneBy({ id: id });
+  // await ProductRepo.update(id, productDetails);
+  await ProductRepo.save(productDetails);
+  return await ProductRepo.findOne({
+    where: { id: id },
+    relations: ["category"],
+  });
 }
 
 export async function deleteById(id: string): Promise<string> {

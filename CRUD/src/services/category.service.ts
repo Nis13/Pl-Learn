@@ -7,7 +7,7 @@ export function getAll(): Promise<Category[]> {
   return CategoryRepo.getAll();
 }
 
-export async function getById(id: string): Promise<string | Category> {
+export async function getById(id: string): Promise<Category> {
   const category = await CategoryRepo.getById(id);
   if (!category) {
     throw new NotFoundError(NO_ENTITIES_FOUND("Category"));

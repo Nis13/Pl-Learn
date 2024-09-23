@@ -19,4 +19,6 @@ router.put(
 );
 router.delete("/:id", ProductController.deleteByIdController);
 
+router.put("/category/:id", ProductController.addCategoryToProduct);
+
 export default router;

@@ -4,6 +4,7 @@ import {
   Length,
   IsPositive,
   IsOptional,
+  IsArray,
 } from "class-validator";
 
 export class UpdateProductDTO {
@@ -16,4 +17,8 @@ export class UpdateProductDTO {
   @IsNumber({}, { message: "Price must be a number" })
   @IsPositive({ message: "Price must be a positive number" })
   price?: number;
+
+  @IsOptional()
+  @IsArray()
+  category?: string[];
 }

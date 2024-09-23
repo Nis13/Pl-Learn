@@ -23,6 +23,15 @@ export async function getByIdService(id: string): Promise<OrderEntity> {
   return order;
 }
 
+/**
+ * takes userId and productId and use them to get the respective entity
+ *
+ * @export
+ * @async
+ * @param {string} userId
+ * @param {string} productId
+ * @returns {Promise<OrderEntity>}
+ */
 export async function createService(
   userId: string,
   productId: string

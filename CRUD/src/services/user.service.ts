@@ -8,6 +8,13 @@ import { ENTITY_NOT_FOUND, NO_ENTITIES_FOUND } from "../constants/Exception";
 
 const logger = loggerWithNameSpace("UserService");
 
+/**
+ * function to get all users from repo to service
+ *
+ * @export
+ * @async
+ * @returns {Promise<UserEntity[]>}
+ */
 export async function getAllService(): Promise<UserEntity[]> {
   logger.info("called getAllUsers By Service");
   const users = await UserRepo.getAll();
