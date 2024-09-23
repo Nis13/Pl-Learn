@@ -1,11 +1,11 @@
 ## Ecommerce
 
-Simple Ecommerce API
+Simple E-commerce API
 
 ### Features
 
-1. Users,Products and Orders can be fetched all or specific with id
-2. User, Product and Ordercan be created, updated and deleted
+1. Users, Products and Orders can be fetched all or specific with an id
+2. User, Product, and Order can be created, updated and deleted
 3. A User can order products
 4. A Product can belong to one or many Categories
 
@@ -76,7 +76,7 @@ Clone the repository:
 
 ### Configure the database:
 
-Set up your PostgreSQL database and update the connection settings in your .env file(use .env.example).
+Set up your PostgreSQL database and update the connection settings in your .env file(use .env.example)
 
 ### Access the application:
 
