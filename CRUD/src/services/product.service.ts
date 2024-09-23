@@ -1,3 +1,4 @@
+import { ENTITY_NAME } from "./../constants/entity";
 import {
   ENTITY_NOT_FOUND,
   NO_ENTITIES_FOUND,
@@ -10,14 +11,14 @@ import * as CategoryService from "../services/category.service";
 import loggerWithNameSpace from "../utilis/logger";
 import { Category } from "../entities/category.entity";
 
-const logger = loggerWithNameSpace("ProductService");
+const logger = loggerWithNameSpace(`${ENTITY_NAME.PRODUCT}Service`);
 
 export async function getAll(): Promise<ProductEntity[]> {
   logger.info("Fetching all products.");
   const products = await ProductRepo.getAll();
   if (products.length == 0) {
-    logger.warn(NO_ENTITIES_FOUND("Product"));
-    throw new NotFoundError(NO_ENTITIES_FOUND("Product"));
+    logger.warn(NO_ENTITIES_FOUND(ENTITY_NAME.PRODUCT));
+    throw new NotFoundError(NO_ENTITIES_FOUND(ENTITY_NAME.PRODUCT));
   }
   return products;
 }
@@ -26,8 +27,8 @@ export async function getById(id: string): Promise<ProductEntity> {
   logger.info(`Fetching product with ID: ${id}`);
   const product = await ProductRepo.getById(id);
   if (!product) {
-    logger.error(ENTITY_NOT_FOUND("Product", id));
-    throw new NotFoundError(ENTITY_NOT_FOUND("Product", id));
+    logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.PRODUCT, id));
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.PRODUCT, id));
   }
   return product;
 }
@@ -43,7 +44,9 @@ export async function getById(id: string): Promise<ProductEntity> {
 export async function create(
   productDetail: CreateProductDTO
 ): Promise<ProductEntity> {
-  logger.info(`Creating product with name: ${productDetail.name}`);
+  logger.info(
+    `Creating ${ENTITY_NAME.PRODUCT} with name: ${productDetail.name}`
+  );
   const { category, ...product } = productDetail;
   const categoryArray: Category[] = [];
   if (category) {
@@ -61,13 +64,13 @@ export async function updateById(
   id: string,
   productDetail: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  logger.info(`Updating product with ID: ${id}`);
+  logger.info(`Updating ${ENTITY_NAME.PRODUCT} with ID: ${id}`);
   await getById(id);
   return ProductRepo.updateById(id, productDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Deleting product with ID: ${id}`);
+  logger.info(`Deleting ${ENTITY_NAME.PRODUCT} with ID: ${id}`);
   await getById(id);
   return ProductRepo.deleteById(id);
 }

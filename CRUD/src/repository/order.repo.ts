@@ -1,6 +1,7 @@
 import AppDataSource from "../typeORMfile";
 import { Order as OrderEntity } from "../entities/order.entity";
 import { ENTITY_DELETED } from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entity";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -29,5 +30,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   await OrderRepo.delete(id);
-  return ENTITY_DELETED("Order", id);
+  return ENTITY_DELETED(ENTITY_NAME.ORDER, id);
 }

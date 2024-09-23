@@ -1,6 +1,7 @@
 import { Category } from "../entities/category.entity";
 import AppDataSource from "../typeORMfile";
 import { ENTITY_DELETED } from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entity";
 
 const CatergoryRepo = AppDataSource.getRepository(Category);
 
@@ -28,5 +29,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   await CatergoryRepo.delete(id);
-  return ENTITY_DELETED("Category", id);
+  return ENTITY_DELETED(ENTITY_NAME.CATEGORY, id);
 }

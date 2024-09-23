@@ -1,3 +1,4 @@
+import { ENTITY_NAME } from "./../constants/entity";
 import { NotFoundError } from "../error/NotFoundError";
 import { Order as OrderEntity } from "../entities/order.entity";
 import * as OrderRepo from "../repository/order.repo";
@@ -9,24 +10,24 @@ import {
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
 
-const logger = loggerWithNameSpace("OrderService");
+const logger = loggerWithNameSpace(`${ENTITY_NAME.ORDER}Service`);
 
 export async function getAll(): Promise<OrderEntity[]> {
-  logger.info("Fetching all orders");
+  logger.info(`Fetching all ${ENTITY_NAME.ORDER}s`);
   const products = await OrderRepo.getAll();
   if (products.length == 0) {
-    logger.warn(NO_ENTITIES_FOUND("Order"));
-    throw new NotFoundError(NO_ENTITIES_FOUND("Order"));
+    logger.warn(NO_ENTITIES_FOUND(ENTITY_NAME.ORDER));
+    throw new NotFoundError(NO_ENTITIES_FOUND(ENTITY_NAME.ORDER));
   }
   return products;
 }
 
 export async function getById(id: string): Promise<OrderEntity> {
-  logger.info(`Fetching order with ID: ${id}`);
+  logger.info(`Fetching ${ENTITY_NAME.ORDER} with ID: ${id}`);
   const order = await OrderRepo.getById(id);
   if (!order) {
-    logger.error(ENTITY_NOT_FOUND("Order", id));
-    throw new NotFoundError(ENTITY_NOT_FOUND("Order", id));
+    logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.ORDER, id));
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.ORDER, id));
   }
   return order;
 }
@@ -57,13 +58,13 @@ export async function updateById(
   id: string,
   orderDetail: Partial<OrderEntity>
 ): Promise<OrderEntity | null> {
-  logger.info(`Updating order with ID: ${id}`);
+  logger.info(`Updating ${ENTITY_NAME.ORDER} with ID: ${id}`);
   await getById(id);
   return OrderRepo.updateById(id, orderDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Deleting order with ID: ${id}`);
+  logger.info(`Deleting ${ENTITY_NAME.ORDER} with ID: ${id}`);
   await getById(id);
   return OrderRepo.deleteById(id);
 }

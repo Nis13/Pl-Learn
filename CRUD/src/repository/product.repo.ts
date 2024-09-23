@@ -1,6 +1,7 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
 import { ENTITY_DELETED } from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entity";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -11,7 +12,7 @@ export async function getAll(): Promise<ProductEntity[]> {
 export async function getById(id: string): Promise<ProductEntity | null> {
   return await ProductRepo.findOne({
     where: { id: id },
-    relations: ["category"],
+    relations: [ENTITY_NAME.CATEGORY],
   });
 }
 
@@ -30,11 +31,11 @@ export async function updateById(
   await ProductRepo.save(productDetails);
   return await ProductRepo.findOne({
     where: { id: id },
-    relations: ["category"],
+    relations: [ENTITY_NAME.CATEGORY],
   });
 }
 
 export async function deleteById(id: string): Promise<string> {
   await ProductRepo.delete(id);
-  return ENTITY_DELETED("Product", id);
+  return ENTITY_DELETED(ENTITY_NAME.PRODUCT, id);
 }

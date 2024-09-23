@@ -1,3 +1,4 @@
+import { ENTITY_NAME } from "../constants/entity";
 import { ENTITY_DELETED } from "../constants/exceptionMessage";
 import { UpdateUserDTO } from "../DTO/updateUser.dto";
 import { User as UserEntity } from "../entities/user.entity";
@@ -40,5 +41,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   await UserRepo.delete(id);
-  return ENTITY_DELETED("User", id);
+  return ENTITY_DELETED(ENTITY_NAME.USER, id);
 }

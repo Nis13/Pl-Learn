@@ -8,8 +8,9 @@ import {
   ENTITY_NOT_FOUND,
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entity";
 
-const logger = loggerWithNameSpace("UserService");
+const logger = loggerWithNameSpace(`${ENTITY_NAME.USER}Service`);
 
 /**
  * function to get all users from repo to service
@@ -22,8 +23,8 @@ export async function getAll(): Promise<UserEntity[]> {
   logger.info("Fetching all users");
   const users = await UserRepo.getAll();
   if (users.length == 0) {
-    logger.warn(NO_ENTITIES_FOUND("User"));
-    throw new NotFoundError(NO_ENTITIES_FOUND("User"));
+    logger.warn(NO_ENTITIES_FOUND(ENTITY_NAME.USER));
+    throw new NotFoundError(NO_ENTITIES_FOUND(ENTITY_NAME.USER));
   }
   return users;
 }
@@ -32,14 +33,16 @@ export async function getById(id: string): Promise<UserEntity> {
   logger.info(`Fetching user with ID: ${id}`);
   const user = await UserRepo.getById(id);
   if (!user) {
-    logger.error(ENTITY_NOT_FOUND("User", id));
-    throw new NotFoundError(ENTITY_NOT_FOUND("User", id));
+    logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.USER, id));
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.USER, id));
   }
   return user;
 }
 
 export function create(userDetail: CreateUserDTO): Promise<UserEntity> {
-  logger.info(`Creating a new user with email: ${userDetail.email}`);
+  logger.info(
+    `Creating a new ${ENTITY_NAME.USER} with email: ${userDetail.email}`
+  );
   return UserRepo.create(userDetail);
 }
 
@@ -47,13 +50,13 @@ export async function updateById(
   id: string,
   userDetail: UpdateUserDTO
 ): Promise<UserEntity | null> {
-  logger.info(`Updating user with ID: ${id}`);
+  logger.info(`Updating ${ENTITY_NAME.USER} with ID: ${id}`);
   await getById(id);
   return UserRepo.updateById(id, userDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
-  logger.info(`Deleting user with ID: ${id}`);
+  logger.info(`Deleting ${ENTITY_NAME.USER} with ID: ${id}`);
   await getById(id);
   return UserRepo.deleteById(id);
 }
