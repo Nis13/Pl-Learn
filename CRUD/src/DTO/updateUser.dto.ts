@@ -1,4 +1,5 @@
-import { IsEmail, IsOptional, IsString, Length } from "class-validator";
+import { IsOptional } from "class-validator";
+import { UserDTO } from "./user.dto";
 
 /**
  * @openapi
@@ -20,13 +21,21 @@ import { IsEmail, IsOptional, IsString, Length } from "class-validator";
  *           example: "john.doe@example.com"
  */
 
-export class UpdateUserDTO {
+// export class UpdateUserDTO extends CreateUserDTO{
+//   @IsOptional()
+//   @IsString({ message: "Name must be a string" })
+//   @Length(3, 50, { message: "Name must be between 3 and 50 characters" })
+//   name?: string;
+
+//   @IsOptional()
+//   @IsEmail({}, { message: "Invalid email format" })
+//   email?: string;
+// }
+
+export class UpdateUserDTO extends UserDTO {
   @IsOptional()
-  @IsString({ message: "Name must be a string" })
-  @Length(3, 50, { message: "Name must be between 3 and 50 characters" })
-  name?: string;
+  name: string;
 
   @IsOptional()
-  @IsEmail({}, { message: "Invalid email format" })
-  email?: string;
+  email: string;
 }

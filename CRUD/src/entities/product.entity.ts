@@ -11,7 +11,7 @@ export class Product extends BaseEntity {
   @Column()
   price: number;
 
-  @ManyToMany(() => Category, (pdtCategory) => pdtCategory.products)
+  @ManyToMany(() => Category)
   @JoinTable({
     name: "product_categories",
     joinColumn: {

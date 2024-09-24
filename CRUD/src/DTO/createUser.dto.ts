@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Length, IsEnum } from "class-validator";
+import { IsString, Length, IsEnum } from "class-validator";
+import { UserDTO } from "./user.dto";
 
 /**
  * @openapi
@@ -39,16 +40,7 @@ import { IsEmail, IsNotEmpty, IsString, Length, IsEnum } from "class-validator";
  *           type: string
  */
 
-export class CreateUserDTO {
-  @IsNotEmpty({ message: "Name should not be empty" })
-  @IsString({ message: "Name must be a string" })
-  @Length(3, 50, { message: "Name must be between 3 and 50 characters" })
-  name: string;
-
-  @IsEmail({}, { message: "Invalid email format" })
-  @IsNotEmpty({ message: "Email should not be empty" })
-  email: string;
-
+export class CreateUserDTO extends UserDTO {
   @IsEnum(["Male", "Female", "Other"], {
     message: "Gender must be either Male, Female, or Other",
   })

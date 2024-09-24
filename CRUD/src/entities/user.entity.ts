@@ -14,6 +14,6 @@ export class User extends BaseEntity {
   @JoinColumn()
   profile: Profile;
 
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user, { cascade: true })
   orders?: Order[];
 }
