@@ -1,4 +1,4 @@
-import { ENTITY_NAME } from "./../constants/entity";
+import { ENTITY_NAME } from "../constants/entityName";
 import {
   ENTITY_NOT_FOUND,
   NO_ENTITIES_FOUND,
@@ -64,14 +64,13 @@ export async function updateById(
   id: string,
   productDetail: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  logger.info(`Updating ${ENTITY_NAME.PRODUCT} with ID: ${id}`);
   await getById(id);
+  logger.info(`Updating ${ENTITY_NAME.PRODUCT} with ID: ${id}`);
   return ProductRepo.updateById(id, productDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {
   logger.info(`Deleting ${ENTITY_NAME.PRODUCT} with ID: ${id}`);
-  await getById(id);
   return ProductRepo.deleteById(id);
 }
 

@@ -1,4 +1,4 @@
-import { ENTITY_NAME } from "./../constants/entity";
+import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
 import { Order as OrderEntity } from "../entities/order.entity";
 import * as OrderRepo from "../repository/order.repo";
@@ -65,6 +65,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   logger.info(`Deleting ${ENTITY_NAME.ORDER} with ID: ${id}`);
-  await getById(id);
   return OrderRepo.deleteById(id);
 }

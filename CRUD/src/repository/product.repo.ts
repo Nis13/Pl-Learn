@@ -1,7 +1,11 @@
 import AppDataSource from "../typeORMfile";
 import { Product as ProductEntity } from "../entities/product.entity";
-import { ENTITY_DELETED } from "../constants/exceptionMessage";
-import { ENTITY_NAME } from "../constants/entity";
+import {
+  ENTITY_DELETED,
+  ENTITY_NOT_FOUND,
+} from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entityName";
+import { NotFoundError } from "../error/NotFoundError";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -27,8 +31,7 @@ export async function updateById(
   id: string,
   productDetails: Partial<ProductEntity>
 ): Promise<ProductEntity | null> {
-  // await ProductRepo.update(id, productDetails);
-  await ProductRepo.save(productDetails);
+  await ProductRepo.update(id, productDetails);
   return await ProductRepo.findOne({
     where: { id: id },
     relations: [ENTITY_NAME.CATEGORY],
@@ -36,6 +39,9 @@ export async function updateById(
 }
 
 export async function deleteById(id: string): Promise<string> {
-  await ProductRepo.delete(id);
+  const result = await ProductRepo.delete(id);
+  if (result.affected == 0) {
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.PRODUCT, id));
+  }
   return ENTITY_DELETED(ENTITY_NAME.PRODUCT, id);
 }

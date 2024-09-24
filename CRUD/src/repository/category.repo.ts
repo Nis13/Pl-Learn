@@ -1,7 +1,11 @@
 import { Category } from "../entities/category.entity";
 import AppDataSource from "../typeORMfile";
-import { ENTITY_DELETED } from "../constants/exceptionMessage";
-import { ENTITY_NAME } from "../constants/entity";
+import {
+  ENTITY_DELETED,
+  ENTITY_NOT_FOUND,
+} from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entityName";
+import { NotFoundError } from "../error/NotFoundError";
 
 const CatergoryRepo = AppDataSource.getRepository(Category);
 
@@ -28,6 +32,9 @@ export async function updateById(
 }
 
 export async function deleteById(id: string): Promise<string> {
-  await CatergoryRepo.delete(id);
+  const result = await CatergoryRepo.delete(id);
+  if (result.affected == 0) {
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.CATEGORY, id));
+  }
   return ENTITY_DELETED(ENTITY_NAME.CATEGORY, id);
 }

@@ -8,7 +8,7 @@ import {
   ENTITY_NOT_FOUND,
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
-import { ENTITY_NAME } from "../constants/entity";
+import { ENTITY_NAME } from "../constants/entityName";
 
 const logger = loggerWithNameSpace(`${ENTITY_NAME.USER}Service`);
 
@@ -57,6 +57,5 @@ export async function updateById(
 
 export async function deleteById(id: string): Promise<string> {
   logger.info(`Deleting ${ENTITY_NAME.USER} with ID: ${id}`);
-  await getById(id);
   return UserRepo.deleteById(id);
 }

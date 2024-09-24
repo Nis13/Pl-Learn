@@ -1,7 +1,11 @@
 import AppDataSource from "../typeORMfile";
 import { Order as OrderEntity } from "../entities/order.entity";
-import { ENTITY_DELETED } from "../constants/exceptionMessage";
-import { ENTITY_NAME } from "../constants/entity";
+import {
+  ENTITY_DELETED,
+  ENTITY_NOT_FOUND,
+} from "../constants/exceptionMessage";
+import { ENTITY_NAME } from "../constants/entityName";
+import { NotFoundError } from "../error/NotFoundError";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -29,6 +33,9 @@ export async function updateById(
 }
 
 export async function deleteById(id: string): Promise<string> {
-  await OrderRepo.delete(id);
+  const result = await OrderRepo.delete(id);
+  if (result.affected == 0) {
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.ORDER, id));
+  }
   return ENTITY_DELETED(ENTITY_NAME.ORDER, id);
 }
