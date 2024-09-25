@@ -1,10 +1,17 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from "typeorm";
 import { Category } from "./category.entity";
-import { Order } from "./order.entity";
-import { BaseEntity } from "./base.entity";
+import { Base } from "./base.entity";
+import { User } from "./user.entity";
 
-@Entity()
-export class Product extends BaseEntity {
+@Entity("product")
+export class Product extends Base {
   @Column("varchar", { length: 200 })
   name: string;
 
@@ -13,7 +20,7 @@ export class Product extends BaseEntity {
 
   @ManyToMany(() => Category)
   @JoinTable({
-    name: "product_categories",
+    name: "product_category",
     joinColumn: {
       name: "category_id",
       referencedColumnName: "id",
@@ -25,6 +32,7 @@ export class Product extends BaseEntity {
   })
   category: Category[];
 
-  @OneToOne(() => Order, (order) => order.product)
-  order: Order;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "seller_id" })
+  seller: User;
 }

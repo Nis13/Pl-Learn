@@ -1,14 +1,16 @@
 import { Entity, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Product } from "./product.entity";
-import { BaseEntity } from "./base.entity";
+import { Base } from "./base.entity";
 
-@Entity("orders")
-export class Order extends BaseEntity {
+@Entity("order")
+export class Order extends Base {
   @ManyToOne(() => User, (user) => user.orders, { onDelete: "CASCADE" })
   user: User;
 
-  @OneToOne(() => Product, (product) => product.order)
-  @JoinColumn()
+  @OneToOne(() => Product)
+  @JoinColumn({
+    name: "product_id",
+  })
   product: Product;
 }
