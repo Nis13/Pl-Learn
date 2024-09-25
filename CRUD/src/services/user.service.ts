@@ -48,7 +48,7 @@ export async function getByEmail(email: string): Promise<UserEntity> {
     logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
     throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
   }
-  return plainToInstance(UserEntity, user);
+  return user;
 }
 
 export async function create(userDetail: CreateUserDTO): Promise<UserEntity> {
