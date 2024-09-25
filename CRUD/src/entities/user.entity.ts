@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Profile } from "./profile.entity";
 import { Order } from "./order.entity";
 import { BaseEntity } from "./base.entity";
+import { Exclude } from "class-transformer";
 @Entity()
 export class User extends BaseEntity {
   @Column("varchar", { length: 200 })
@@ -11,6 +12,7 @@ export class User extends BaseEntity {
   email: string;
 
   @Column("varchar")
+  @Exclude()
   password: string;
 
   @OneToOne(() => Profile, { cascade: true })
