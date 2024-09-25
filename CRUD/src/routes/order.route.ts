@@ -1,5 +1,7 @@
 import express from "express";
 import * as OrderController from "../controller/order.controller";
+import { validationMiddleware } from "../middleware/validator";
+import { CreateOrderDTO } from "../DTO/createOrder.dto";
 
 const router = express();
 
@@ -81,7 +83,7 @@ router.get("/:id", OrderController.getById);
  *       400:
  *         description: Bad Request Error
  */
-router.post("/", OrderController.create);
+router.post("/", validationMiddleware(CreateOrderDTO), OrderController.create);
 
 // router.put("/:id", OrderController.updateByIdController);
 

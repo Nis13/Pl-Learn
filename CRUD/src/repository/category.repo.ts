@@ -6,6 +6,7 @@ import {
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
+import { Equal } from "typeorm";
 
 const CatergoryRepo = AppDataSource.getRepository(Category);
 
@@ -14,7 +15,7 @@ export async function getAll(): Promise<Category[]> {
 }
 
 export async function getById(id: string): Promise<Category | null> {
-  return CatergoryRepo.findOneBy({ id: id });
+  return CatergoryRepo.findOne({ where: { id: Equal(id) } });
 }
 
 export async function create(category: Category): Promise<Category> {

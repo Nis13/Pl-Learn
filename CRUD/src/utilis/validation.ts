@@ -11,6 +11,5 @@ export const validationPipe = async (
   const errors = await validate(transformedClass, {
     validationError: { target: false },
   });
-  console.log("error", errors);
   return errors;
 };
