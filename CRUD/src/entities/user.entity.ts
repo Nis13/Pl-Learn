@@ -10,6 +10,9 @@ export class User extends BaseEntity {
   @Column("varchar", { length: 200 })
   email: string;
 
+  @Column("varchar")
+  password: string;
+
   @OneToOne(() => Profile, { cascade: true })
   @JoinColumn()
   profile: Profile;

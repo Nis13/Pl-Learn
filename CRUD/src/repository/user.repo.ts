@@ -22,13 +22,18 @@ export async function getById(id: string): Promise<UserEntity | null> {
   return await UserRepo.findOneBy({ id: id });
 }
 
+export async function getByEmail(email: string): Promise<UserEntity | null> {
+  return await UserRepo.findOneBy({ email: email });
+}
+
 export async function create(
   userDetails: Partial<UserEntity>
 ): Promise<UserEntity> {
-  const { name, email, ...userProfile } = userDetails;
+  const { name, email, password, ...userProfile } = userDetails;
   const userToCreate = {
     name: name,
     email: email,
+    password: password,
     profile: userProfile,
   };
   const createdUser = UserRepo.create(userToCreate);

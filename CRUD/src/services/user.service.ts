@@ -9,6 +9,7 @@ import {
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
+import bcrypt from "bcrypt";
 
 const logger = loggerWithNameSpace(`${ENTITY_NAME.USER}Service`);
 
@@ -39,10 +40,22 @@ export async function getById(id: string): Promise<UserEntity> {
   return user;
 }
 
-export function create(userDetail: CreateUserDTO): Promise<UserEntity> {
+export async function getByEmail(email: string): Promise<UserEntity> {
+  logger.info(`Fetching ${ENTITY_NAME.USER} with email: ${email}`);
+  const user = await UserRepo.getByEmail(email);
+  if (!user) {
+    logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
+  }
+  return user;
+}
+
+export async function create(userDetail: CreateUserDTO): Promise<UserEntity> {
   logger.info(
     `Creating a new ${ENTITY_NAME.USER} with email: ${userDetail.email}`
   );
+  const password = await bcrypt.hash(userDetail.password, 10);
+  userDetail.password = password;
   return UserRepo.create(userDetail);
 }
 
