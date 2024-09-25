@@ -4,13 +4,26 @@ import productRouter from "./product.route";
 import orderRouter from "./order.route";
 import categoryRouter from "./category.route";
 import authRouter from "./auth.route";
+import passport from "../passport";
 
 const router = express.Router();
 
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
-router.use("/product", productRouter);
-router.use("/order", orderRouter);
-router.use("/category", categoryRouter);
+router.use(
+  "/product",
+  passport.authenticate("jwt", { session: false }),
+  productRouter
+);
+router.use(
+  "/order",
+  passport.authenticate("jwt", { session: false }),
+  orderRouter
+);
+router.use(
+  "/category",
+  passport.authenticate("jwt", { session: false }),
+  categoryRouter
+);
 
 export default router;
