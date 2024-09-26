@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import * as UserService from "../services/user.service";
+import * as OrderService from "../services/order.service";
 
 export async function getAll(
   req: Request,
@@ -7,10 +7,10 @@ export async function getAll(
   next: NextFunction
 ): Promise<void> {
   try {
-    const users = await UserService.getAll();
-    res.json(users);
-  } catch (error) {
-    next(error);
+    const allOrders = await OrderService.getAll();
+    res.json(allOrders);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -21,10 +21,10 @@ export async function getById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const userById = await UserService.getById(id);
-    res.json(userById);
-  } catch (error) {
-    next(error);
+    const orderById = await OrderService.getById(id);
+    res.json(orderById);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -34,11 +34,11 @@ export async function create(
   next: NextFunction
 ): Promise<void> {
   try {
-    const userDetail = req.body;
-    const createdUser = await UserService.create(userDetail);
-    res.json(createdUser);
-  } catch (error) {
-    next(error);
+    const { userId, productId } = req.body;
+    const createdOrder = await OrderService.create(userId, productId);
+    res.json(createdOrder);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -49,11 +49,11 @@ export async function updateById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const user = req.body;
-    const updatedUser = await UserService.updateById(id, user);
-    res.json(updatedUser);
-  } catch (error) {
-    next(error);
+    const order = req.body;
+    const updatedOrder = await OrderService.updateById(id, order);
+    res.json(updatedOrder);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -64,9 +64,9 @@ export async function deleteById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const message = await UserService.deleteById(id);
+    const message = await OrderService.deleteById(id);
     res.json(message);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 }
