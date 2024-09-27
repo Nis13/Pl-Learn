@@ -8,6 +8,16 @@ import passport from "../passport";
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
 router.use(
