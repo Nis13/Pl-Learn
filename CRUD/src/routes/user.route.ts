@@ -1,8 +1,9 @@
 import express from "express";
-import * as userRoutes from "../controller/user.controller";
+import * as userController from "../controller/user.controller";
 import { validationMiddleware } from "../middleware/validator";
 import { CreateUserDTO } from "../DTO/createUser.dto";
 import { UpdateUserDTO } from "../DTO/updateUser.dto";
+import passport from "../passport";
 const router = express();
 
 /**
@@ -16,8 +17,17 @@ const router = express();
  *       404:
  *         description: Users not found
  */
-router.get("/", userRoutes.getAll);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  userController.getAll
+);
 
+router.get(
+  "/myDetail",
+  passport.authenticate("jwt", { session: false }),
+  userController.getMyDetail
+);
 /**
  * @openapi
  * /user/{id}:
@@ -39,7 +49,11 @@ router.get("/", userRoutes.getAll);
  *          description: Not found
  */
 
-router.get("/:id", userRoutes.getById);
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  userController.getById
+);
 
 /**
  * @openapi
@@ -62,7 +76,7 @@ router.get("/:id", userRoutes.getById);
  *       400:
  *         description: Bad Request Error
  */
-router.post("/", validationMiddleware(CreateUserDTO), userRoutes.create);
+router.post("/", validationMiddleware(CreateUserDTO), userController.create);
 
 /**
  * @openapi
@@ -85,7 +99,12 @@ router.post("/", validationMiddleware(CreateUserDTO), userRoutes.create);
  *       400:
  *         description: Bad Request Error
  */
-router.put("/:id", validationMiddleware(UpdateUserDTO), userRoutes.updateById);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  validationMiddleware(UpdateUserDTO),
+  userController.updateById
+);
 
 /**
  * @openapi
@@ -111,6 +130,10 @@ router.put("/:id", validationMiddleware(UpdateUserDTO), userRoutes.updateById);
  *       404:
  *          description: User not found
  */
-router.delete("/:id", userRoutes.deleteById);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  userController.deleteById
+);
 
 export default router;

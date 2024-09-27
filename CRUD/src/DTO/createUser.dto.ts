@@ -1,4 +1,10 @@
-import { IsString, Length, IsEnum } from "class-validator";
+import {
+  IsString,
+  Length,
+  IsEnum,
+  IsNotEmpty,
+  IsStrongPassword,
+} from "class-validator";
 import { UserDTO } from "./user.dto";
 
 /**
@@ -41,6 +47,10 @@ import { UserDTO } from "./user.dto";
  */
 
 export class CreateUserDTO extends UserDTO {
+  @IsNotEmpty()
+  @IsStrongPassword()
+  password: string;
+
   @IsEnum(["Male", "Female", "Other"], {
     message: "Gender must be either Male, Female, or Other",
   })

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as OrderService from "../services/order.service";
+import { UserRequest } from "../interface/userRequest";
 
 export async function getAll(
   req: Request,
@@ -29,13 +30,14 @@ export async function getById(
 }
 
 export async function create(
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const { userId, productId } = req.body;
-    const createdOrder = await OrderService.create(userId, productId);
+    const userId = req.user?.id;
+    const { productId } = req.body;
+    const createdOrder = await OrderService.create(userId!, productId);
     res.json(createdOrder);
   } catch (err) {
     next(err);

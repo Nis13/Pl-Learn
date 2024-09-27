@@ -6,6 +6,7 @@ import {
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
+import { Equal } from "typeorm";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -14,7 +15,13 @@ export async function getAll(): Promise<OrderEntity[]> {
 }
 
 export async function getById(id: string): Promise<OrderEntity | null> {
-  return await OrderRepo.findOneBy({ id: id });
+  return await OrderRepo.findOne({ where: { id: Equal(id) } });
+}
+
+export async function getByUserId(id: string): Promise<OrderEntity[] | null> {
+  return await OrderRepo.find({
+    where: { user: { id: Equal(id) } },
+  });
 }
 
 export async function create(
@@ -29,7 +36,7 @@ export async function updateById(
   productDetails: Partial<OrderEntity>
 ): Promise<OrderEntity | null> {
   await OrderRepo.update(id, productDetails);
-  return await OrderRepo.findOneBy({ id: id });
+  return await OrderRepo.findOne({ where: { id: Equal(id) } });
 }
 
 export async function deleteById(id: string): Promise<string> {

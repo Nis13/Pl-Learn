@@ -9,6 +9,8 @@ import {
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
+import bcrypt from "bcrypt";
+import { plainToInstance } from "class-transformer";
 
 const logger = loggerWithNameSpace(`${ENTITY_NAME.USER}Service`);
 
@@ -26,7 +28,7 @@ export async function getAll(): Promise<UserEntity[]> {
     logger.warn(NO_ENTITIES_FOUND(ENTITY_NAME.USER));
     throw new NotFoundError(NO_ENTITIES_FOUND(ENTITY_NAME.USER));
   }
-  return users;
+  return plainToInstance(UserEntity, users);
 }
 
 export async function getById(id: string): Promise<UserEntity> {
@@ -36,14 +38,26 @@ export async function getById(id: string): Promise<UserEntity> {
     logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.USER, id));
     throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.USER, id));
   }
+  return plainToInstance(UserEntity, user);
+}
+
+export async function getByEmail(email: string): Promise<UserEntity> {
+  logger.info(`Fetching ${ENTITY_NAME.USER} with email: ${email}`);
+  const user = await UserRepo.getByEmail(email);
+  if (!user) {
+    logger.error(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
+    throw new NotFoundError(ENTITY_NOT_FOUND(ENTITY_NAME.USER, email));
+  }
   return user;
 }
 
-export function create(userDetail: CreateUserDTO): Promise<UserEntity> {
+export async function create(userDetail: CreateUserDTO): Promise<UserEntity> {
   logger.info(
     `Creating a new ${ENTITY_NAME.USER} with email: ${userDetail.email}`
   );
-  return UserRepo.create(userDetail);
+  const password = await bcrypt.hash(userDetail.password, 10);
+  userDetail.password = password;
+  return plainToInstance(UserEntity, UserRepo.create(userDetail));
 }
 
 export async function updateById(
@@ -52,7 +66,7 @@ export async function updateById(
 ): Promise<UserEntity | null> {
   logger.info(`Updating ${ENTITY_NAME.USER} with ID: ${id}`);
   await getById(id);
-  return UserRepo.updateById(id, userDetail);
+  return plainToInstance(UserEntity, UserRepo.updateById(id, userDetail));
 }
 
 export async function deleteById(id: string): Promise<string> {

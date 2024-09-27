@@ -26,6 +26,7 @@ const router = express();
  */
 router.get("/", ProductController.getAll);
 
+router.get("/my-products", ProductController.getBySellerId);
 /**
  * @openapi
  * /product/{id}:

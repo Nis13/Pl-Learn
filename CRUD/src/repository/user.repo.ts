@@ -1,3 +1,4 @@
+import { Equal } from "typeorm";
 import { ENTITY_NAME } from "../constants/entityName";
 import {
   ENTITY_DELETED,
@@ -19,16 +20,21 @@ export async function getAll(): Promise<UserEntity[]> {
 }
 
 export async function getById(id: string): Promise<UserEntity | null> {
-  return await UserRepo.findOneBy({ id: id });
+  return await UserRepo.findOne({ where: { id: Equal(id) } });
+}
+
+export async function getByEmail(email: string): Promise<UserEntity | null> {
+  return await UserRepo.findOne({ where: { email: Equal(email) } });
 }
 
 export async function create(
   userDetails: Partial<UserEntity>
 ): Promise<UserEntity> {
-  const { name, email, ...userProfile } = userDetails;
+  const { name, email, password, ...userProfile } = userDetails;
   const userToCreate = {
     name: name,
     email: email,
+    password: password,
     profile: userProfile,
   };
   const createdUser = UserRepo.create(userToCreate);
@@ -40,7 +46,7 @@ export async function updateById(
   updateUserDetails: UpdateUserDTO
 ): Promise<UserEntity | null> {
   await UserRepo.update(id, updateUserDetails);
-  return await UserRepo.findOneBy({ id: id });
+  return await UserRepo.findOne({ where: { id: Equal(id) } });
 }
 
 export async function deleteById(id: string): Promise<string> {
