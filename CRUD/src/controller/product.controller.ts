@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import * as ProductService from "../services/product.service";
-import { UserRequest } from "../interface/userRequest";
+import { Request } from "../interface/userRequest";
 
 export async function getAll(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -30,7 +30,7 @@ export async function getById(
 }
 
 export async function getBySellerId(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -44,7 +44,7 @@ export async function getBySellerId(
 }
 
 export async function create(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {

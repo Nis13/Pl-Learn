@@ -1,6 +1,6 @@
-import { Request } from "express";
+import { Request as ExpressRequest } from "express";
 
-export interface UserRequest extends Request {
+export interface Request extends ExpressRequest {
   user?: JWTPayload;
 }
 
