@@ -52,3 +52,14 @@ export async function deleteById(id: string): Promise<string> {
   }
   return ENTITY_DELETED(ENTITY_NAME.PRODUCT, id);
 }
+
+export async function addCategoryToProduct(
+  id: string,
+  productDetails: Partial<ProductEntity>
+): Promise<ProductEntity | null> {
+  await ProductRepo.save(productDetails);
+  return await ProductRepo.findOne({
+    where: { id: Equal(id) },
+    relations: [ENTITY_NAME.CATEGORY],
+  });
+}

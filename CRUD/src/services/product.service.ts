@@ -95,5 +95,5 @@ export async function addCategoryToProduct(
   const product = await getById(productId);
   const category = await CategoryService.getById(categoryId);
   product.category.push(category);
-  return updateById(productId, product);
+  return ProductRepo.addCategoryToProduct(productId, product);
 }
