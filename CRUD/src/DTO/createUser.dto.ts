@@ -4,8 +4,10 @@ import {
   IsEnum,
   IsNotEmpty,
   IsStrongPassword,
+  IsOptional,
 } from "class-validator";
 import { UserDTO } from "./user.dto";
+import { Role } from "../constants/role.enum";
 
 /**
  * @openapi
@@ -16,6 +18,7 @@ import { UserDTO } from "./user.dto";
  *       required:
  *         - name
  *         - email
+ *         - password
  *         - gender
  *         - bio
  *       properties:
@@ -25,6 +28,12 @@ import { UserDTO } from "./user.dto";
  *         email:
  *           type: string
  *           default: jane.doe@example.com
+ *         password:
+ *           type: string
+ *           default: Janedoe@123
+ *         role:
+ *           type: string
+ *           default: user
  *         gender:
  *           type: string
  *           default: Male
@@ -40,6 +49,8 @@ import { UserDTO } from "./user.dto";
  *           type: string
  *         id:
  *           type: string
+ *         role:
+ *           type: string
  *         createdAt:
  *           type: string
  *         updatedAt:
@@ -50,6 +61,10 @@ export class CreateUserDTO extends UserDTO {
   @IsNotEmpty()
   @IsStrongPassword()
   password: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
 
   @IsEnum(["Male", "Female", "Other"], {
     message: "Gender must be either Male, Female, or Other",
