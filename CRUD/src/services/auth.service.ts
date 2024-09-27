@@ -20,13 +20,14 @@ export async function login(
     existingUser.password
   );
   if (!isValidPassword) {
-    logger.info("Password doesnot match");
+    logger.info(NOT_VALID("Password"));
     throw new UnauthenticatedError(NOT_VALID("Password"));
   }
 
   const payload = {
     id: existingUser.id,
     email: existingUser.email,
+    role: existingUser.role,
   };
   const accessToken = sign(payload, config.jwt.secret);
 
