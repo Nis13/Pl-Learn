@@ -1,12 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import * as UserService from "../services/user.service";
-import { UserRequest } from "../interface/userRequest";
+import { Request } from "../interface/userRequest";
+import { UpdateUserDTO } from "../DTO/updateUser.dto";
 
-export async function getAll(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const users = await UserService.getAll();
     res.json(users);
@@ -30,7 +27,7 @@ export async function getById(
 }
 
 export async function getMyDetail(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -64,7 +61,7 @@ export async function updateById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const user = req.body;
+    const user: UpdateUserDTO = req.body;
     const updatedUser = await UserService.updateById(id, user);
     res.json(updatedUser);
   } catch (error) {
@@ -73,7 +70,7 @@ export async function updateById(
 }
 
 export async function updateMyDetail(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {

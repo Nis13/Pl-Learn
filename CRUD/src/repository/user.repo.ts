@@ -12,11 +12,7 @@ import AppDataSource from "../typeORMfile";
 const UserRepo = AppDataSource.getRepository(UserEntity);
 
 export async function getAll(): Promise<UserEntity[]> {
-  return await UserRepo.find({
-    relations: {
-      profile: true,
-    },
-  });
+  return await UserRepo.find();
 }
 
 export async function getById(id: string): Promise<UserEntity | null> {
@@ -30,11 +26,12 @@ export async function getByEmail(email: string): Promise<UserEntity | null> {
 export async function create(
   userDetails: Partial<UserEntity>
 ): Promise<UserEntity> {
-  const { name, email, password, ...userProfile } = userDetails;
+  const { name, email, password, role, ...userProfile } = userDetails;
   const userToCreate = {
     name: name,
     email: email,
     password: password,
+    role: role,
     profile: userProfile,
   };
   const createdUser = UserRepo.create(userToCreate);

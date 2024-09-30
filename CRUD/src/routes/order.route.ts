@@ -2,6 +2,8 @@ import express from "express";
 import * as OrderController from "../controller/order.controller";
 import { validationMiddleware } from "../middleware/validator";
 import { CreateOrderDTO } from "../DTO/createOrder.dto";
+import { authorize } from "../middleware/auth";
+import { Role } from "../constants/role.enum";
 
 const router = express();
 
@@ -10,6 +12,8 @@ const router = express();
  * /order:
  *   get:
  *     summary: Returns all orders
+ *     tags:
+ *       - Order
  *     responses:
  *       200:
  *         description: A list of orders
@@ -29,14 +33,18 @@ const router = express();
  *                 message:
  *                   type: string
  *                   example: "There are no Products available"
+ *       401:
+ *         description: Unauthorized
  */
-router.get("/", OrderController.getAll);
+router.get("/", authorize(Role.Admin), OrderController.getAll);
 
 /**
  * @openapi
  * /order/{id}:
  *   get:
  *     summary: Returns Order by ID
+ *     tags:
+ *       - Order
  *     parameters:
  *       - in: path
  *         name: id
@@ -59,14 +67,18 @@ router.get("/", OrderController.getAll);
  *                 message:
  *                   type: string
  *                   example: "Order of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
+ *       401:
+ *         description: Unauthorized
  */
-router.get("/:id", OrderController.getById);
+router.get("/:id", authorize(Role.Admin), OrderController.getById);
 
 /**
  * @openapi
  * /order:
  *   post:
  *     summary: Creates a new order and returns the info of the created order
+ *     tags:
+ *       - Order
  *     requestBody:
  *       required: true
  *       content:
@@ -82,16 +94,23 @@ router.get("/:id", OrderController.getById);
  *               $ref: '#/components/schemas/createOrderResponse'
  *       400:
  *         description: Bad Request Error
+ *       401:
+ *         description: Unauthorized
  */
-router.post("/", validationMiddleware(CreateOrderDTO), OrderController.create);
-
-// router.put("/:id", OrderController.updateByIdController);
+router.post(
+  "/",
+  authorize(Role.Admin, Role.Admin),
+  validationMiddleware(CreateOrderDTO),
+  OrderController.create
+);
 
 /**
  * @openapi
  * /order/{id}:
  *   delete:
  *     summary: delete the order by Id
+ *     tags:
+ *       - Order
  *     parameters:
  *       - in: path
  *         name: id
@@ -118,7 +137,13 @@ router.post("/", validationMiddleware(CreateOrderDTO), OrderController.create);
  *                 message:
  *                   type: string
  *                   example: "Order of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
+ *       401:
+ *         description: Unauthorized
  */
-router.delete("/:id", OrderController.deleteById);
+router.delete(
+  "/:id",
+  authorize(Role.Admin, Role.Admin),
+  OrderController.deleteById
+);
 
 export default router;

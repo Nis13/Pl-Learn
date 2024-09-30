@@ -11,6 +11,7 @@ import {
 import { ENTITY_NAME } from "../constants/entityName";
 import bcrypt from "bcrypt";
 import { plainToInstance } from "class-transformer";
+import { BadRequestError } from "../error/BadRequestError";
 
 const logger = loggerWithNameSpace(`${ENTITY_NAME.USER}Service`);
 
@@ -55,6 +56,10 @@ export async function create(userDetail: CreateUserDTO): Promise<UserEntity> {
   logger.info(
     `Creating a new ${ENTITY_NAME.USER} with email: ${userDetail.email}`
   );
+  const existingUser = await UserRepo.getByEmail(userDetail.email);
+  if (existingUser) {
+    throw new BadRequestError("Email already in use");
+  }
   const password = await bcrypt.hash(userDetail.password, 10);
   userDetail.password = password;
   return plainToInstance(UserEntity, UserRepo.create(userDetail));
@@ -65,7 +70,10 @@ export async function updateById(
   userDetail: UpdateUserDTO
 ): Promise<UserEntity | null> {
   logger.info(`Updating ${ENTITY_NAME.USER} with ID: ${id}`);
-  await getById(id);
+  const existingUser = await UserRepo.getByEmail(userDetail.email);
+  if (existingUser && existingUser.id !== id) {
+    throw new BadRequestError("Email already in use");
+  }
   return plainToInstance(UserEntity, UserRepo.updateById(id, userDetail));
 }
 

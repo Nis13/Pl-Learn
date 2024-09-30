@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import * as OrderService from "../services/order.service";
-import { UserRequest } from "../interface/userRequest";
+import { Request } from "../interface/userRequest";
 
 export async function getAll(
   req: Request,
@@ -30,7 +30,7 @@ export async function getById(
 }
 
 export async function create(
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {

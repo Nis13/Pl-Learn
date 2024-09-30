@@ -3,6 +3,8 @@ import * as ProductController from "../controller/product.controller";
 import { validationMiddleware } from "../middleware/validator";
 import { CreateProductDTO } from "../DTO/createProduct.dto";
 import { UpdateProductDTO } from "../DTO/updateProduct.dto";
+import { Role } from "../constants/role.enum";
+import { authorize } from "../middleware/auth";
 const router = express();
 
 /**
@@ -10,9 +12,17 @@ const router = express();
  * /product:
  *   get:
  *     summary: Returns all products
+ *     tags:
+ *       - Product
  *     responses:
  *       200:
  *         description: A successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/updateProductResponse'
  *       404:
  *         description: No products available
  *         content:
@@ -22,16 +32,52 @@ const router = express();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "There are no Products available"
+ *                   example: "There are no products available"
+ *       401:
+ *         description: Unauthorized
  */
-router.get("/", ProductController.getAll);
 
-router.get("/my-products", ProductController.getBySellerId);
+router.get("/", authorize(Role.Admin), ProductController.getAll);
+
+/**
+ * @openapi
+ * /product/my-products:
+ *   get:
+ *     summary: Returns all products of loggedIn user
+ *     tags:
+ *       - Product
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/updateProductResponse'
+ *       404:
+ *         description: No products available
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product with id : 1 not found"
+ *       401:
+ *         description: Unauthorized
+ */
+router.get(
+  "/my-products",
+  authorize(Role.Admin, Role.User),
+  ProductController.getBySellerId
+);
 /**
  * @openapi
  * /product/{id}:
  *   get:
  *     summary: Returns product by ID
+ *     tags:
+ *       - Product
  *     parameters:
  *       - in: path
  *         name: id
@@ -54,14 +100,18 @@ router.get("/my-products", ProductController.getBySellerId);
  *                 message:
  *                   type: string
  *                   example: "Product of ID: 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found"
+ *       401:
+ *         description: Unauthorized
  */
-router.get("/:id", ProductController.getById);
+router.get("/:id", authorize(Role.Admin, Role.User), ProductController.getById);
 
 /**
  * @openapi
  * /product:
  *   post:
  *     summary: Creates a new product and returns the info of the created product
+ *     tags:
+ *       - Product
  *     requestBody:
  *       required: true
  *       content:
@@ -77,9 +127,12 @@ router.get("/:id", ProductController.getById);
  *               $ref: '#/components/schemas/createProductResponse'
  *       400:
  *         description: Bad Request Error
+ *       401:
+ *         description: Unauthorized
  */
 router.post(
   "/",
+  authorize(Role.Admin, Role.User),
   validationMiddleware(CreateProductDTO),
   ProductController.create
 );
@@ -89,6 +142,8 @@ router.post(
  * /product/{id}:
  *   put:
  *     summary: updates the existing product
+ *     tags:
+ *       - Product
  *     requestBody:
  *       required: true
  *       content:
@@ -112,9 +167,12 @@ router.post(
  *                 message:
  *                   type: string
  *                   example: "Product of ID: c6cc6f98-cdda-45ba-a20e-6a033cb778d4 notfound"
+ *       401:
+ *         description: Unauthorized
  */
 router.put(
   "/:id",
+  authorize(Role.Admin, Role.Admin),
   validationMiddleware(UpdateProductDTO),
   ProductController.updateById
 );
@@ -124,6 +182,8 @@ router.put(
  * /product/{id}:
  *   delete:
  *     summary: delete the product by Id
+ *     tags:
+ *       - Product
  *     parameters:
  *       - in: path
  *         name: id
@@ -142,14 +202,22 @@ router.put(
  *                   example: "Product of ID: c6cc6f98-cdda-45ba-a20e-6a033cb778d4 successfully deleted"
  *       404:
  *          description: Product not found
+ *       401:
+ *         description: Unauthorized
  */
-router.delete("/:id", ProductController.deleteById);
+router.delete(
+  "/:id",
+  authorize(Role.Admin, Role.Admin),
+  ProductController.deleteById
+);
 
 /**
  * @openapi
- * /products/category/{id}:
+ * /product/:id/category:
  *   put:
  *     summary: Add a category to a product
+ *     tags:
+ *       - Product
  *     parameters:
  *       - name: id
  *         in: path
@@ -180,8 +248,14 @@ router.delete("/:id", ProductController.deleteById);
  *               $ref: '#/components/schemas/createProductResponse'
  *       404:
  *         description: Product or category not found
+ *       401:
+ *         description: Unauthorized
  */
 
-router.put("/category/:id", ProductController.addCategoryToProduct);
+router.put(
+  "/:id/category",
+  authorize(Role.Admin, Role.Admin),
+  ProductController.addCategoryToProduct
+);
 
 export default router;
