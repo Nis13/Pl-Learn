@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { User } from "./user.entity";
 
 @Entity()
 export class Profile {
@@ -10,4 +17,8 @@ export class Profile {
 
   @Column("varchar", { length: 200 })
   bio: string;
+
+  @OneToOne(() => User, { cascade: true })
+  @JoinColumn({ name: "user_id" })
+  user: User;
 }
