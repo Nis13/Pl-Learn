@@ -1,4 +1,4 @@
-import { IsOptional } from "class-validator";
+import { IsEnum, IsOptional } from "class-validator";
 import { UserDTO } from "./user.dto";
 import { Role } from "../constants/role.enum";
 
@@ -20,6 +20,10 @@ import { Role } from "../constants/role.enum";
  *           format: email
  *           description: "Email address of the user"
  *           example: "john.doe@example.com"
+ *         role:
+ *           type: string
+ *           description: User or Admin
+ *           example: "Admin"
  */
 
 export class UpdateUserDTO extends UserDTO {
@@ -30,5 +34,6 @@ export class UpdateUserDTO extends UserDTO {
   email: string;
 
   @IsOptional()
+  @IsEnum(Role)
   role: Role;
 }

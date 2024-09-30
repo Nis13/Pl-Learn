@@ -3,4 +3,5 @@ export enum ENTITY_NAME {
   USER = "user",
   PRODUCT = "product",
   CATEGORY = "category",
+  PROFILE = "profile",
 }
