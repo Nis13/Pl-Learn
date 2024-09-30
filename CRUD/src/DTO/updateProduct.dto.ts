@@ -61,5 +61,8 @@ export class UpdateProductDTO extends CreateProductDTO {
   price: number;
 
   @IsOptional()
+  stock: number;
+
+  @IsOptional()
   category?: string[];
 }
