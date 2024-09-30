@@ -9,6 +9,8 @@ import {
   ENTITY_NOT_FOUND,
   NO_ENTITIES_FOUND,
 } from "../constants/exceptionMessage";
+import { BadRequestError } from "../error/BadRequestError";
+import { UpdateOrderDTO } from "../DTO/updateOrder.dto";
 
 const logger = loggerWithNameSpace(`${ENTITY_NAME.ORDER}Service`);
 
@@ -43,24 +45,38 @@ export async function getById(id: string): Promise<OrderEntity> {
  */
 export async function create(
   userId: string,
-  productId: string
+  productId: string,
+  quantity: number
 ): Promise<OrderEntity> {
   logger.info(
     `Creating order for user ID: ${userId} and product ID: ${productId}`
   );
   const user = await UserService.getById(userId);
   const product = await ProductService.getById(productId);
-  const orderDetail = { user: user, product: product };
-  return OrderRepo.create(orderDetail);
+  if (product.stock < quantity) {
+    throw new BadRequestError("Not Enough Product in the stock");
+  }
+  product.stock -= quantity;
+  const orderDetail = { user: user, product: product, quantity: quantity };
+  return OrderRepo.create(orderDetail, product.stock);
 }
 
 export async function updateById(
   id: string,
-  orderDetail: Partial<OrderEntity>
+  orderDetail: Partial<UpdateOrderDTO>
 ): Promise<OrderEntity | null> {
   logger.info(`Updating ${ENTITY_NAME.ORDER} with ID: ${id}`);
-  await getById(id);
-  return OrderRepo.updateById(id, orderDetail);
+  const order = await getById(id);
+  logger.info(`The requested order quantity is ${orderDetail.quantity}`);
+  if (orderDetail.quantity !== undefined) {
+    if (order.product.stock + order.quantity < orderDetail.quantity) {
+      throw new BadRequestError("Not Enough Product in the stock");
+    }
+    const productStock =
+      order.product.stock + order.quantity - orderDetail.quantity;
+    logger.info(`The productStock becomes  ${productStock}`);
+    return OrderRepo.updateById(id, orderDetail, productStock);
+  } else return OrderRepo.updateById(id, orderDetail);
 }
 
 export async function deleteById(id: string): Promise<string> {

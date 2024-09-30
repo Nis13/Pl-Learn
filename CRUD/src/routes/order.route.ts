@@ -4,6 +4,7 @@ import { validationMiddleware } from "../middleware/validator";
 import { CreateOrderDTO } from "../DTO/createOrder.dto";
 import { authorize } from "../middleware/auth";
 import { Role } from "../constants/role.enum";
+import { UpdateOrderDTO } from "../DTO/updateOrder.dto";
 
 const router = express();
 
@@ -102,6 +103,37 @@ router.post(
   authorize(Role.Admin, Role.Admin),
   validationMiddleware(CreateOrderDTO),
   OrderController.create
+);
+
+/**
+ * @openapi
+ * /order:
+ *   put:
+ *     summary: Updates the order
+ *     tags:
+ *       - Order
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/createOrderSchema"
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/createOrderResponse'
+ *       400:
+ *         description: Bad Request Error
+ *       401:
+ *         description: Unauthorized
+ */
+router.put(
+  "/:id",
+  authorize(Role.Admin, Role.Admin),
+  validationMiddleware(UpdateOrderDTO),
+  OrderController.updateById
 );
 
 /**

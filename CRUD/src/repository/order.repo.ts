@@ -1,5 +1,5 @@
 import AppDataSource from "../typeORMfile";
-import { Order as OrderEntity } from "../entities/order.entity";
+import { Order, Order as OrderEntity } from "../entities/order.entity";
 import {
   ENTITY_DELETED,
   ENTITY_NOT_FOUND,
@@ -7,6 +7,8 @@ import {
 import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
 import { Equal } from "typeorm";
+import { Product } from "../entities/product.entity";
+import { BadRequestError } from "../error/BadRequestError";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -15,7 +17,10 @@ export async function getAll(): Promise<OrderEntity[]> {
 }
 
 export async function getById(id: string): Promise<OrderEntity | null> {
-  return await OrderRepo.findOne({ where: { id: Equal(id) } });
+  return await OrderRepo.findOne({
+    where: { id: Equal(id) },
+    relations: [ENTITY_NAME.PRODUCT],
+  });
 }
 
 export async function getByUserId(id: string): Promise<OrderEntity[] | null> {
@@ -25,18 +30,54 @@ export async function getByUserId(id: string): Promise<OrderEntity[] | null> {
 }
 
 export async function create(
-  orderDetails: Partial<OrderEntity>
+  orderDetails: Partial<OrderEntity>,
+  productStock: number
 ): Promise<OrderEntity> {
-  const order = OrderRepo.create(orderDetails);
-  return await OrderRepo.save(order);
+  return AppDataSource.transaction(async (TransactionalEntityManager) => {
+    if (orderDetails.product) {
+      await TransactionalEntityManager.update(
+        Product,
+        {
+          id: orderDetails.product.id,
+        },
+        { stock: productStock }
+      );
+    }
+    const order = TransactionalEntityManager.create(Order, orderDetails);
+    const createdOrder = await TransactionalEntityManager.save(Order, order);
+
+    return createdOrder;
+  });
 }
 
 export async function updateById(
   id: string,
-  productDetails: Partial<OrderEntity>
+  orderDetail: Partial<OrderEntity>,
+  productStock?: number
 ): Promise<OrderEntity | null> {
-  await OrderRepo.update(id, productDetails);
-  return await OrderRepo.findOne({ where: { id: Equal(id) } });
+  try {
+    return AppDataSource.transaction(async (transactionalEntityManger) => {
+      await transactionalEntityManger.update(Order, id, orderDetail);
+      const updatedOrder = await transactionalEntityManger.findOne(Order, {
+        where: { id: Equal(id) },
+        relations: [ENTITY_NAME.PRODUCT],
+      });
+      const productToupdate = {
+        stock: productStock,
+      };
+      await transactionalEntityManger.update(
+        Product,
+        { id: updatedOrder?.product.id },
+        productToupdate
+      );
+      return await transactionalEntityManger.findOne(Order, {
+        where: { id: Equal(id) },
+        relations: [ENTITY_NAME.PRODUCT],
+      });
+    });
+  } catch (error) {
+    throw new BadRequestError("transaction failed" + error);
+  }
 }
 
 export async function deleteById(id: string): Promise<string> {
