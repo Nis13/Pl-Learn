@@ -6,8 +6,7 @@ import {
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
-import { Equal } from "typeorm";
-import { Product } from "../entities/product.entity";
+import { EntityManager, Equal } from "typeorm";
 
 const OrderRepo = AppDataSource.getRepository(OrderEntity);
 
@@ -15,8 +14,12 @@ export async function getAll(): Promise<OrderEntity[]> {
   return await OrderRepo.find();
 }
 
-export async function getById(id: string): Promise<OrderEntity | null> {
-  return await OrderRepo.findOne({
+export async function getById(
+  id: string,
+  manager?: EntityManager
+): Promise<OrderEntity | null> {
+  const repository = manager?.getRepository(Order) || OrderRepo;
+  return await repository.findOne({
     where: { id: Equal(id) },
     relations: [ENTITY_NAME.PRODUCT],
   });
@@ -30,48 +33,24 @@ export async function getByUserId(id: string): Promise<OrderEntity[] | null> {
 
 export async function create(
   orderDetails: Partial<OrderEntity>,
-  productStock: number
+  manager?: EntityManager
 ): Promise<OrderEntity> {
-  return AppDataSource.transaction(async (TransactionalEntityManager) => {
-    if (orderDetails.product) {
-      await TransactionalEntityManager.update(
-        Product,
-        {
-          id: orderDetails.product.id,
-        },
-        { stock: productStock }
-      );
-    }
-    const order = TransactionalEntityManager.create(Order, orderDetails);
-    const createdOrder = await TransactionalEntityManager.save(Order, order);
-
-    return createdOrder;
-  });
+  const repository = manager?.getRepository(Order) || OrderRepo;
+  const order = repository.create(orderDetails);
+  const createdOrder = await repository.save(order);
+  return createdOrder;
 }
 
 export async function updateById(
   id: string,
   orderDetail: Partial<OrderEntity>,
-  productStock?: number
+  manager?: EntityManager
 ): Promise<OrderEntity | null> {
-  return AppDataSource.transaction(async (transactionalEntityManger) => {
-    await transactionalEntityManger.update(Order, id, orderDetail);
-    const updatedOrder = await transactionalEntityManger.findOne(Order, {
-      where: { id: Equal(id) },
-      relations: [ENTITY_NAME.PRODUCT],
-    });
-    const productToupdate = {
-      stock: productStock,
-    };
-    await transactionalEntityManger.update(
-      Product,
-      { id: updatedOrder?.product.id },
-      productToupdate
-    );
-    return await transactionalEntityManger.findOne(Order, {
-      where: { id: Equal(id) },
-      relations: [ENTITY_NAME.PRODUCT],
-    });
+  const repository = manager || OrderRepo;
+  await repository.update(Order, id, orderDetail);
+  return await repository.findOne(Order, {
+    where: { id: Equal(id) },
+    relations: [ENTITY_NAME.PRODUCT],
   });
 }
 

@@ -100,7 +100,7 @@ router.get("/:id", authorize(Role.Admin), OrderController.getById);
  */
 router.post(
   "/",
-  authorize(Role.Admin, Role.Admin),
+  authorize(Role.Admin, Role.User),
   validationMiddleware(CreateOrderDTO),
   OrderController.create
 );
@@ -131,7 +131,7 @@ router.post(
  */
 router.put(
   "/:id",
-  authorize(Role.Admin, Role.Admin),
+  authorize(Role.Admin, Role.User),
   validationMiddleware(UpdateOrderDTO),
   OrderController.updateById
 );

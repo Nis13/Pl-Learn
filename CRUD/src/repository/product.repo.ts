@@ -1,12 +1,12 @@
 import AppDataSource from "../typeORMfile";
-import { Product as ProductEntity } from "../entities/product.entity";
+import { Product, Product as ProductEntity } from "../entities/product.entity";
 import {
   ENTITY_DELETED,
   ENTITY_NOT_FOUND,
 } from "../constants/exceptionMessage";
 import { ENTITY_NAME } from "../constants/entityName";
 import { NotFoundError } from "../error/NotFoundError";
-import { Equal } from "typeorm";
+import { EntityManager, Equal } from "typeorm";
 
 const ProductRepo = AppDataSource.getRepository(ProductEntity);
 
@@ -36,10 +36,12 @@ export async function create(
 
 export async function updateById(
   id: string,
-  productDetails: Partial<ProductEntity>
+  productDetails: Partial<ProductEntity>,
+  manager?: EntityManager
 ): Promise<ProductEntity | null> {
-  await ProductRepo.update(id, productDetails);
-  return await ProductRepo.findOne({
+  const repository = manager || ProductRepo;
+  await repository.update(Product, id, productDetails);
+  return await repository.findOne(Product, {
     where: { id: Equal(id) },
     relations: [ENTITY_NAME.CATEGORY],
   });
