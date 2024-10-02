@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
 
 /**
  * @openapi
@@ -45,4 +45,8 @@ export class CreateOrderDTO {
   @IsNotEmpty()
   @IsUUID()
   productId: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  quantity: number;
 }

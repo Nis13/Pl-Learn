@@ -5,43 +5,53 @@ import {
   ENTITY_NOT_FOUND,
 } from "../constants/exceptionMessage";
 import { UpdateUserDTO } from "../DTO/updateUser.dto";
-import { User as UserEntity } from "../entities/user.entity";
+import { User } from "../entities/user.entity";
 import { NotFoundError } from "../error/NotFoundError";
 import AppDataSource from "../typeORMfile";
+import { Profile } from "../entities/profile.entity";
 
-const UserRepo = AppDataSource.getRepository(UserEntity);
+const UserRepo = AppDataSource.getRepository(User);
 
-export async function getAll(): Promise<UserEntity[]> {
+export async function getAll(): Promise<User[]> {
   return await UserRepo.find();
 }
 
-export async function getById(id: string): Promise<UserEntity | null> {
+export async function getById(id: string): Promise<User | null> {
   return await UserRepo.findOne({ where: { id: Equal(id) } });
 }
 
-export async function getByEmail(email: string): Promise<UserEntity | null> {
+export async function getByEmail(email: string): Promise<User | null> {
   return await UserRepo.findOne({ where: { email: Equal(email) } });
 }
 
-export async function create(
-  userDetails: Partial<UserEntity>
-): Promise<UserEntity> {
+export async function create(userDetails: Partial<User>): Promise<User> {
   const { name, email, password, role, ...userProfile } = userDetails;
-  const userToCreate = {
-    name: name,
-    email: email,
-    password: password,
-    role: role,
-    profile: userProfile,
-  };
-  const createdUser = UserRepo.create(userToCreate);
-  return await UserRepo.save(createdUser);
+  return await AppDataSource.transaction(async (transactionalEntityManager) => {
+    const userToCreate = {
+      name,
+      email,
+      password,
+      role,
+    };
+    const createdUser = transactionalEntityManager.create(User, userToCreate);
+    const savedUser = await transactionalEntityManager.save(User, createdUser);
+    const userProfileToCreate = {
+      ...userProfile,
+      user: savedUser,
+    };
+    const createdUserProfile = transactionalEntityManager.create(
+      Profile,
+      userProfileToCreate
+    );
+    await transactionalEntityManager.save(Profile, createdUserProfile);
+    return savedUser;
+  });
 }
 
 export async function updateById(
   id: string,
   updateUserDetails: UpdateUserDTO
-): Promise<UserEntity | null> {
+): Promise<User | null> {
   await UserRepo.update(id, updateUserDetails);
   return await UserRepo.findOne({ where: { id: Equal(id) } });
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Profile } from "./profile.entity";
 import { Order } from "./order.entity";
 import { Base } from "./base.entity";
@@ -20,7 +20,6 @@ export class User extends Base {
   password: string;
 
   @OneToOne(() => Profile, { cascade: true })
-  @JoinColumn({ name: "profile_id" })
   profile: Profile;
 
   @OneToMany(() => Order, (order) => order.user, { cascade: true })

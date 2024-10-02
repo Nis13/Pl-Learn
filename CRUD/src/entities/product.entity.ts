@@ -18,6 +18,9 @@ export class Product extends Base {
   @Column()
   price: number;
 
+  @Column()
+  stock: number;
+
   @ManyToMany(() => Category)
   @JoinTable({
     name: "product_category",

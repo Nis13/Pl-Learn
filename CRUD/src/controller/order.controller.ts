@@ -36,8 +36,12 @@ export async function create(
 ): Promise<void> {
   try {
     const userId = req.user?.id;
-    const { productId } = req.body;
-    const createdOrder = await OrderService.create(userId!, productId);
+    const { productId, quantity } = req.body;
+    const createdOrder = await OrderService.create(
+      userId!,
+      productId,
+      quantity
+    );
     res.json(createdOrder);
   } catch (err) {
     next(err);

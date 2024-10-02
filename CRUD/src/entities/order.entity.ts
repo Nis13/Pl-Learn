@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToOne, JoinColumn } from "typeorm";
+import { Entity, ManyToOne, OneToOne, JoinColumn, Column } from "typeorm";
 import { User } from "./user.entity";
 import { Product } from "./product.entity";
 import { Base } from "./base.entity";
@@ -13,4 +13,7 @@ export class Order extends Base {
     name: "product_id",
   })
   product: Product;
+
+  @Column()
+  quantity: number;
 }

@@ -79,6 +79,10 @@ export class CreateProductDTO {
   @IsPositive({ message: "Price must be a positive number" })
   price: number;
 
+  @IsNumber({}, { message: "Stock must be a number" })
+  @IsPositive({ message: "Stock must be a positive number" })
+  stock: number;
+
   @IsOptional()
   @IsArray()
   @IsUUID("4", { each: true })
